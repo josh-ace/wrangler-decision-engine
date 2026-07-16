@@ -1,0 +1,5669 @@
+{
+  "schema_version": "1.0",
+  "title": "2026 Jeep Wrangler — US Order Guide (structured)",
+  "provenance": {
+    "source": "order_guide_2026",
+    "as_of_date": "2025-08-06",
+    "source_issued_date": "2025-07-24",
+    "source_reissued_date": "2025-08-06",
+    "extracted_on": "2026-07-15",
+    "market": "United States",
+    "currency": "USD",
+    "documents": [
+      {
+        "body_style": "JL_2_door",
+        "file": "2026-jeep-wrangler-JL-2-door-orderguide-pricelist.pdf",
+        "issued": "2025-07-24",
+        "reissued": "2025-08-06",
+        "pages": 17
+      },
+      {
+        "body_style": "JLU_4_door",
+        "file": "2026-jeep-wrangler-JLU-4-door-orderguide-pricelist.pdf",
+        "issued": "2025-07-24",
+        "reissued": "2025-08-06",
+        "pages": 28
+      }
+    ],
+    "price_semantics": {
+      "fwp": "Factory Wholesale Price — the dealer/wholesale figure printed by the guide.",
+      "msrp": "Manufacturer Suggested Retail Price.",
+      "invoice": "NOT published by the order guide. Null everywhere. FWP is a wholesale figure but is not the dealer invoice; no invoice approximation is made per task scope.",
+      "deltas": "Option/package/color fwp & msrp are extra-cost DELTAS added on top of a configuration price, except trim.configurations which are fully-delivered prices (base + engine/transmission + quick order package, before destination)."
+    },
+    "notes": "Extracted via pdfplumber word-coordinate reconstruction of the FCA 'Customer Preferred Code Guide' PDFs. Trims are selected by MODEL CODE + QUICK ORDER PACKAGE CODE. See order_guide_notes.md for ambiguities and page references."
+  },
+  "legend": {
+    "E": "Extra cost",
+    "N/C": "No charge (is_no_charge=true, price 0)",
+    "N/A": "Not available",
+    "P": "Packaged (included in a package)",
+    "S": "Standard",
+    "(S)": "Standard",
+    "M/H": "Must have (prerequisite) — see constraints.must_have",
+    "ONLY 1": "Mutually exclusive — see constraints.only_one_of",
+    "FWP": "Factory Wholesale Price",
+    "MSRP": "Manufacturer Suggested Retail Price",
+    "late": "Late Availability per the guide"
+  },
+  "scope_notes": {
+    "powertrains_present": [
+      "3.6L V6 (ERC)",
+      "2.0L I4 Turbo (EC1)"
+    ],
+    "powertrains_absent": [
+      "4xe plug-in hybrid",
+      "6.4L V8 (392)",
+      "Diesel"
+    ],
+    "absence_note": "Neither the 4xe plug-in hybrid nor the 392 V8 appears in these 2026 order guides. 4xe is therefore NOT applicable to scenario building from this source. See order_guide_notes.md.",
+    "standard_equipment": "Full per-trim STANDARD EQUIPMENT lists exist on JL pages 14-17 and JLU pages 24-28. They were not exhaustively transcribed into this file (task priority was priced/configurable items). Package CONTENT lists that ARE captured come from the GROUP DETAIL pages."
+  },
+  "body_styles": {
+    "JL_2_door": {
+      "name": "Wrangler 2-Door (JL)",
+      "doors": 2,
+      "destination_charge": {
+        "amount": 1995,
+        "amount_ak_hi": 2045,
+        "invoice": null,
+        "notes": "$1,995; $2,045 in AK/HI.",
+        "provenance": {
+          "source": "order_guide_2026",
+          "as_of_date": "2025-08-06",
+          "page": 2
+        }
+      },
+      "powertrains": [
+        {
+          "code_prefix": "23",
+          "engine": "3.6L V6 24V VVT (ERC)",
+          "engine_code": "ERC",
+          "transmission": "6-Speed Manual (DEM)",
+          "transmission_code": "DEM",
+          "is_base": true,
+          "availability": "late",
+          "notes": "Standard powertrain; base MSRP is quoted for this config. Marked Late Availability on the guide.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 2
+          }
+        },
+        {
+          "code_prefix": "22",
+          "engine": "2.0L I4 DOHC DI Turbo w/ESS (EC1)",
+          "engine_code": "EC1",
+          "transmission": "8-Spd Auto 850RE (DFT)",
+          "transmission_code": "DFT",
+          "is_base": false,
+          "availability": "available",
+          "notes": "+$2,500 MSRP over base (V6 manual). Engine N/C; the 8-speed automatic is the priced item.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 2
+          }
+        }
+      ],
+      "powertrain_note": "2-door offers two powertrains: 23-series = 3.6L V6 + 6-spd manual (base, late availability); 22-series = 2.0T + 8-spd auto (+$2,500 MSRP). The V6 with 8-spd auto (24-series) is NOT offered on the 2-door.",
+      "trims": [
+        {
+          "name": "Sport",
+          "model_code": "JLJL72",
+          "trim_family": "Sport",
+          "base_msrp": 33785,
+          "base_fwp": 33076,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23B",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 33076,
+              "msrp": 33785,
+              "invoice": null,
+              "availability": "late",
+              "notes": "Base config (V6 manual, late availability)"
+            },
+            {
+              "qop_code": "22B",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 35326,
+              "msrp": 36285,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Sport is the base Quick Order Package; adds no content over base model.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Sport S",
+          "model_code": "JLJL72",
+          "trim_family": "Sport",
+          "base_msrp": 38035,
+          "base_fwp": 36214,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23S",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 36214,
+              "msrp": 38035,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22S",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 38464,
+              "msrp": 40535,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "BGG",
+              "description": "Advanced Brake Assist"
+            },
+            {
+              "code": "LMG",
+              "description": "Automatic Headlamps"
+            },
+            {
+              "code": "GMA",
+              "description": "Corning Gorilla Glass"
+            },
+            {
+              "code": "GCD",
+              "description": "Deep Tint Sunscreen Windows"
+            },
+            {
+              "code": "NH1",
+              "description": "Enhanced Adaptive Cruise Control"
+            },
+            {
+              "code": "LSU",
+              "description": "Full Speed Fwd Collision Warn Plus"
+            },
+            {
+              "code": "GTB",
+              "description": "Power Heated Mirrors"
+            },
+            {
+              "code": "SCJ",
+              "description": "Premium Wrapped Steering Wheel"
+            },
+            {
+              "code": "LSA",
+              "description": "Security Alarm"
+            },
+            {
+              "code": "GND",
+              "description": "Sun Visors w/Illum Vanity Mirrors"
+            }
+          ],
+          "package_content_note": "Net package value over Sport: $4,250 MSRP / $3,826 FWP.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Willys",
+          "model_code": "JLJL72",
+          "trim_family": "Sport",
+          "base_msrp": 42105,
+          "base_fwp": 40535,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23W",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 40535,
+              "msrp": 42105,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22W",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 42814,
+              "msrp": 44605,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "WFY",
+              "description": "17x7.5 Painted Black Wheels"
+            },
+            {
+              "code": "DMF",
+              "description": "4.10 Rear Axle Ratio"
+            },
+            {
+              "code": "MS3",
+              "description": "4-Wheel Drive Swing Gate Decal"
+            },
+            {
+              "code": "XF2",
+              "description": "7 and 4 Pin Wiring Harness"
+            },
+            {
+              "code": "BGG",
+              "description": "Advanced Brake Assist"
+            },
+            {
+              "code": "LMG",
+              "description": "Automatic Headlamps"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            },
+            {
+              "code": "MW7",
+              "description": "Black Grille"
+            },
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            },
+            {
+              "code": "DS7",
+              "description": "Conventional Differential Frt Axle"
+            },
+            {
+              "code": "GMA",
+              "description": "Corning Gorilla Glass"
+            },
+            {
+              "code": "DJV",
+              "description": "Dana M210 Wide HD Tube Front Axle"
+            },
+            {
+              "code": "DRF",
+              "description": "Dana M220 Wide Rear Axle"
+            },
+            {
+              "code": "LPY",
+              "description": "Daytime Running Lamp LED Accents"
+            },
+            {
+              "code": "GCD",
+              "description": "Deep Tint Sunscreen Windows"
+            },
+            {
+              "code": "DSH",
+              "description": "E-Locker Rear Axle"
+            },
+            {
+              "code": "NH1",
+              "description": "Enhanced Adaptive Cruise Control"
+            },
+            {
+              "code": "LNV",
+              "description": "Front LED Fog Lamps"
+            },
+            {
+              "code": "MDA",
+              "description": "Front License Plate Bracket"
+            },
+            {
+              "code": "LSU",
+              "description": "Full Speed Fwd Collision Warn Plus"
+            },
+            {
+              "code": "Z1K",
+              "description": "GVW Rating - 5400#"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LPX",
+              "description": "LED Premium Reflector Headlamps"
+            },
+            {
+              "code": "TWG",
+              "description": "LT285/70R17C BSW M/T Tires"
+            },
+            {
+              "code": "MMZ",
+              "description": "MIC Rubicon Highline Flare"
+            },
+            {
+              "code": "MBU",
+              "description": "Mold In Color Bumper w/Gloss Black"
+            },
+            {
+              "code": "CWA",
+              "description": "Mopar All-Weather Floor Mats"
+            },
+            {
+              "code": "XG7",
+              "description": "Off-Road Plus Mode"
+            },
+            {
+              "code": "GTB",
+              "description": "Power Heated Mirrors"
+            },
+            {
+              "code": "SCJ",
+              "description": "Premium Wrapped Steering Wheel"
+            },
+            {
+              "code": "MEF",
+              "description": "Rock Protection Sill Rails"
+            },
+            {
+              "code": "LSA",
+              "description": "Security Alarm"
+            },
+            {
+              "code": "GND",
+              "description": "Sun Visors w/Illum Vanity Mirrors"
+            },
+            {
+              "code": "MT6",
+              "description": "Willys Hood Decal"
+            },
+            {
+              "code": "SDV",
+              "description": "Willys Suspension"
+            }
+          ],
+          "package_content_note": "Net package value over Sport: $8,320 MSRP / $7,488 FWP.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Rubicon",
+          "model_code": "JLJS72",
+          "trim_family": "Rubicon",
+          "base_msrp": 44765,
+          "base_fwp": 43199,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23R",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 43199,
+              "msrp": 44765,
+              "invoice": null,
+              "availability": "late",
+              "notes": "Base config (V6 manual, late availability)"
+            },
+            {
+              "qop_code": "22R",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 45449,
+              "msrp": 47265,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "RHY",
+              "description": "12.3\" Touchscreen Display"
+            },
+            {
+              "code": "RTQ",
+              "description": "4G LTE Wi-Fi Hot Spot"
+            },
+            {
+              "code": "CKA",
+              "description": "Acoustic Front Seat Area Carpet"
+            },
+            {
+              "code": "GAP",
+              "description": "Acoustic Laminated Front Door Glass"
+            },
+            {
+              "code": "RC4",
+              "description": "Alpine Premium Audio System"
+            },
+            {
+              "code": "RFP",
+              "description": "Apple CarPlay"
+            },
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "HT3",
+              "description": "Body Color 3-Piece Hard Top"
+            },
+            {
+              "code": "MHV",
+              "description": "Body Color Rubicon Highline Flare"
+            },
+            {
+              "code": "RTV",
+              "description": "Connected Travel & Traffic Services"
+            },
+            {
+              "code": "RTM",
+              "description": "Connectivity - US/Canada"
+            },
+            {
+              "code": "JVG",
+              "description": "Driver Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "RF5",
+              "description": "Google Android Auto"
+            },
+            {
+              "code": "RE8",
+              "description": "HD Radio"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XNY",
+              "description": "Integrated Off-Road Camera"
+            },
+            {
+              "code": "XRB",
+              "description": "Integrated Voice Command w/Bluetooth"
+            },
+            {
+              "code": "CVP",
+              "description": "Leather Wrapped Park Brake Handle"
+            },
+            {
+              "code": "CVW",
+              "description": "Leather Wrapped Shift Knob"
+            },
+            {
+              "code": "CHD",
+              "description": "Mopar Hardtop Headliner"
+            },
+            {
+              "code": "*VL",
+              "description": "Nappa Leather Seats"
+            },
+            {
+              "code": "ST8",
+              "description": "No Soft Top"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            },
+            {
+              "code": "JPU",
+              "description": "Power 4-Way Driver Lumbar Adjust"
+            },
+            {
+              "code": "CBF",
+              "description": "Premium Door Trim Panel"
+            },
+            {
+              "code": "GNK",
+              "description": "Rear View Auto Dim Mirror"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            },
+            {
+              "code": "RTU",
+              "description": "SiriusXM with 360L"
+            },
+            {
+              "code": "MC6",
+              "description": "Steel Front Bumper"
+            },
+            {
+              "code": "MD6",
+              "description": "Steel Rear Bumper"
+            },
+            {
+              "code": "AHC",
+              "description": "Trailer Tow Prep Package"
+            },
+            {
+              "code": "UBX",
+              "description": "Uconnect 5 Nav w/ 12.3\" Display (USA)"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "package_content_note": "Content shown is the Rubicon standard equipment highlighted on the guide's package-content page (page 7). Rubicon is its own model code (JLJS72).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "name": "Rubicon X",
+          "model_code": "JLJS72",
+          "trim_family": "Rubicon",
+          "base_msrp": 54715,
+          "base_fwp": 52155,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23Y",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 52155,
+              "msrp": 54715,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22Y",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 57105,
+              "msrp": 60215,
+              "invoice": null,
+              "availability": "available",
+              "notes": "Includes 35-inch tires"
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Rubicon X = Rubicon + Rubicon X package. Net package value over Rubicon: W/23- (V6 manual) $9,950 MSRP / $8,956 FWP; W/22- (2.0T auto) $12,950 MSRP / $11,656 FWP. The 22Y (2.0T) config includes the factory 35-inch tire package, which accounts for the larger delta. Rubicon X adds Nappa leather (VL) at no charge and other content; the guide does not print a line-item content list for the Rubicon X package.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        }
+      ],
+      "option_packages": [
+        {
+          "code": "ADA",
+          "name": "LED Headlamp and Fog Lamp Group",
+          "category": "option_group",
+          "fwp": 1526,
+          "msrp": 1695,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": [
+            {
+              "code": "LNV",
+              "description": "Front LED Fog Lamps"
+            },
+            {
+              "code": "LPX",
+              "description": "LED Premium Reflector Headlamps"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "Shown available on Sport S column (ADA).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "ADH",
+          "name": "Trailer Tow and Aux Switch Group",
+          "category": "option_group",
+          "fwp": 1076,
+          "msrp": 1195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": [
+            {
+              "code": "XF2",
+              "description": "7 and 4 Pin Wiring Harness"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            },
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "ADH",
+          "name": "Trailer Tow and Aux Switch Group (Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 86,
+          "msrp": 95,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "On Rubicon priced $95 MSRP: includes XFN and LH2; XF2 is standard.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "AD3",
+          "name": "Steel Bumper Group",
+          "category": "option_group",
+          "fwp": 1346,
+          "msrp": 1495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "MC6",
+              "description": "Steel Front Bumper"
+            },
+            {
+              "code": "MD6",
+              "description": "Steel Rear Bumper"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "AJ1",
+          "name": "Safety Group",
+          "category": "option_group",
+          "fwp": 1436,
+          "msrp": 1595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys"
+          ],
+          "contents": [
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LAY",
+              "description": "LED Taillamps"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "AJ1",
+          "name": "Safety Group (Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 1346,
+          "msrp": 1495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LAY",
+              "description": "LED Taillamps"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "AJK",
+          "name": "Convenience Group",
+          "category": "option_group",
+          "fwp": 2066,
+          "msrp": 2295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys"
+          ],
+          "contents": [
+            {
+              "code": "GXD",
+              "description": "Passive Entry, Front Door Locks"
+            },
+            {
+              "code": "HAB",
+              "description": "Air Conditioning w/Auto Temp Control"
+            },
+            {
+              "code": "JMA",
+              "description": "Air Filtering"
+            },
+            {
+              "code": "JAL",
+              "description": "Cluster 7.0\" TFT Color Display"
+            },
+            {
+              "code": "RSR",
+              "description": "Emergency / Assistance Call"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XBM",
+              "description": "Remote Start System"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "constraints": {
+            "must_have": "DEM+ERC (W/DEM AND ERC) or DFT+EC1 (W/DFT AND EC1)",
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "Same $2,295 MSRP price whether paired with V6 (DEM/ERC) or 2.0T (DFT/EC1).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "AJK",
+          "name": "Convenience Group (Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 1166,
+          "msrp": 1295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "GXD",
+              "description": "Passive Entry, Front Door Locks"
+            },
+            {
+              "code": "HAB",
+              "description": "Air Conditioning w/Auto Temp Control"
+            },
+            {
+              "code": "JMA",
+              "description": "Air Filtering"
+            },
+            {
+              "code": "JAL",
+              "description": "Cluster 7.0\" TFT Color Display"
+            },
+            {
+              "code": "RSR",
+              "description": "Emergency / Assistance Call"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XBM",
+              "description": "Remote Start System"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "constraints": {
+            "must_have": "DEM+ERC or DFT+EC1",
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "AJY",
+          "name": "Technology Group",
+          "category": "option_group",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "RHY",
+              "description": "12.3\" Touchscreen Display"
+            },
+            {
+              "code": "RTQ",
+              "description": "4G LTE Wi-Fi Hot Spot"
+            },
+            {
+              "code": "RC4",
+              "description": "Alpine Premium Audio System"
+            },
+            {
+              "code": "RFP",
+              "description": "Apple CarPlay"
+            },
+            {
+              "code": "RTV",
+              "description": "Connected Travel & Traffic Services"
+            },
+            {
+              "code": "RTM",
+              "description": "Connectivity - US/Canada"
+            },
+            {
+              "code": "RF5",
+              "description": "Google Android Auto"
+            },
+            {
+              "code": "JLN",
+              "description": "GPS Navigation"
+            },
+            {
+              "code": "RE8",
+              "description": "HD Radio"
+            },
+            {
+              "code": "RTF",
+              "description": "Integrated Center Stack Radio"
+            },
+            {
+              "code": "XNY",
+              "description": "Integrated Off-Road Camera"
+            },
+            {
+              "code": "XRB",
+              "description": "Integrated Voice Command w/Bluetooth"
+            },
+            {
+              "code": "GNK",
+              "description": "Rear View Auto Dim Mirror"
+            },
+            {
+              "code": "X9B",
+              "description": "SiriusXM Radio Service"
+            },
+            {
+              "code": "RTU",
+              "description": "SiriusXM with 360L"
+            },
+            {
+              "code": "UBX",
+              "description": "Uconnect 5 Nav w/ 12.3\" Display (USA)"
+            }
+          ],
+          "constraints": {
+            "must_have": "RC4",
+            "not_available_with": "RCH",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "AGB",
+          "name": "Xtreme 35 Tire Package",
+          "category": "wheels_tires",
+          "fwp": 4406,
+          "msrp": 4895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "WF8",
+              "description": "17x8.0 Machined Wheels w/Blk Pockets"
+            },
+            {
+              "code": "SDG",
+              "description": "35\" Tire Suspension"
+            },
+            {
+              "code": "DHF",
+              "description": "4:1 Rock-Trac HD Full Time 4WD Sys"
+            },
+            {
+              "code": "DMU",
+              "description": "4.56 Rear Axle Ratio"
+            },
+            {
+              "code": "DS7",
+              "description": "Conventional Differential Frt Axle"
+            },
+            {
+              "code": "DRN",
+              "description": "Dana M220 Wide Full Floating Rr Axle"
+            },
+            {
+              "code": "MP8",
+              "description": "Delete 4-Whl Drive Swing Gate Decal"
+            },
+            {
+              "code": "Z5E",
+              "description": "GVW Rating - 5650#"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "TVC",
+              "description": "LT315/70R17C 113/110S Tires"
+            },
+            {
+              "code": "MMZ",
+              "description": "MIC Rubicon Highline Flare"
+            },
+            {
+              "code": "XDB",
+              "description": "Mopar Hinge-Gate Reinforcement"
+            },
+            {
+              "code": "CXK",
+              "description": "Mopar Jack Spacer"
+            },
+            {
+              "code": "XFP",
+              "description": "Mopar Tire Relocation Kit"
+            },
+            {
+              "code": "NLA",
+              "description": "Wheel Flare Extensions"
+            }
+          ],
+          "constraints": {
+            "must_have": "EC1 (2.0T)",
+            "not_available_with": "ERC; WAA; WFD; WFH; WFY (Sport family). On Rubicon: ERC; WFE; WFV",
+            "only_one_of": null
+          },
+          "notes": "Factory 35-inch tire package. Requires the 2.0T (EC1) engine.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XE5",
+          "name": "Warn Winch",
+          "category": "option_group",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "22Y; AGB; MBA; TVC",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "HT1",
+          "name": "Black 3-Piece Hard Top",
+          "category": "top",
+          "fwp": 1706,
+          "msrp": 1895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "ST8",
+              "description": "No Soft Top"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "HT1 or HT3 (on Rubicon)"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "HT3",
+          "name": "Body Color 3-Piece Hard Top",
+          "category": "top",
+          "fwp": 1976,
+          "msrp": 2195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "ST8",
+              "description": "No Soft Top"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "HT1 or HT3"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        }
+      ],
+      "seat_options": [
+        {
+          "code": "*VL",
+          "name": "Nappa Leather Seats",
+          "category": "seat",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "JVG",
+              "description": "Driver Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "CVP",
+              "description": "Leather Wrapped Park Brake Handle"
+            },
+            {
+              "code": "CVW",
+              "description": "Leather Wrapped Shift Knob"
+            },
+            {
+              "code": "JPU",
+              "description": "Power 4-Way Driver Lumbar Adjust"
+            },
+            {
+              "code": "CBF",
+              "description": "Premium Door Trim Panel"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "W/2_R (Rubicon) $1,995 MSRP; W/2_Y (Rubicon X) N/C (standard on Rubicon X). Sales/trim code VLX9.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 11
+          }
+        },
+        {
+          "code": "(S)",
+          "name": "Cloth Low-Back Bucket Seats",
+          "category": "seat",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "Standard. Trim code E7X9 (Sport family) / K7X9 (Rubicon).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        }
+      ],
+      "standalone_options": [
+        {
+          "code": "WFH",
+          "name": "17x7.5 Machined Whls w/Black Pockets",
+          "category": "wheels",
+          "fwp": 986,
+          "msrp": 1095,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "WFE",
+          "name": "17x7.5 Mach Whls w/Black Pockets",
+          "category": "wheels",
+          "fwp": 986,
+          "msrp": 1095,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "22Y",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "TP3",
+          "name": "245/75R17 All-Terrain Tires",
+          "category": "tires",
+          "fwp": 446,
+          "msrp": 495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AGB",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "DMS",
+          "name": "4.88 Rear Axle Ratio",
+          "category": "drivetrain",
+          "fwp": 896,
+          "msrp": 995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "DEM",
+            "not_available_with": "DFT",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "RC4",
+          "name": "Alpine Premium Audio System",
+          "category": "audio",
+          "fwp": 1436,
+          "msrp": 1595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "On Rubicon 'P' (packaged) in some configs.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MHV",
+          "name": "Body Color Rubicon Highline Flare",
+          "category": "exterior",
+          "fwp": 446,
+          "msrp": 495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "GCD",
+          "name": "Deep Tint Sunscreen Windows",
+          "category": "exterior",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "'P' (packaged/included) on Sport S and Willys.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XWX",
+          "name": "Jeep Trail Rated Kit",
+          "category": "appearance",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "2S6",
+          "name": "MyFlexCare Service Plan",
+          "category": "service",
+          "fwp": 203,
+          "msrp": 225,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MDA",
+          "name": "Front License Plate Bracket",
+          "category": "exterior",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "CWJ",
+          "name": "Soft Top Window Storage Bag",
+          "category": "top",
+          "fwp": 68,
+          "msrp": 75,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "STA",
+            "not_available_with": "HT1 (Sport family); HT1 or HT3 (Rubicon)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9E",
+          "name": "Mopar 1941 Hood Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CWA",
+          "name": "Mopar All-Weather Floor Mats",
+          "category": "mopar",
+          "fwp": 153,
+          "msrp": 170,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9D",
+          "name": "Mopar American Flag Hood Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "M9E",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XJD",
+          "name": "Mopar Black Fuel Filler Door",
+          "category": "mopar",
+          "fwp": 130,
+          "msrp": 145,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MRU",
+          "name": "Mopar Black Tubular Side Steps",
+          "category": "mopar",
+          "fwp": 653,
+          "msrp": 725,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "MRT or MRU"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CK5",
+          "name": "Mopar Cargo Tub Liner",
+          "category": "mopar",
+          "fwp": 40,
+          "msrp": 45,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "CLN or CLP",
+            "not_available_with": "RC4 (Sport family); AJY or RC4 (Rubicon)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MRT",
+          "name": "Mopar Chrome Tube Steps",
+          "category": "mopar",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "MRT or MRU"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "LFR",
+          "name": "Mopar Doors Off Mirror Kit",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MYT",
+          "name": "Mopar Grille Guard Triple Loop",
+          "category": "mopar",
+          "fwp": 580,
+          "msrp": 645,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "MBA",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "CHD",
+          "name": "Mopar Hardtop Headliner",
+          "category": "mopar",
+          "fwp": 590,
+          "msrp": 655,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MMU",
+          "name": "Mopar HD Rock Slider w/Step Assist",
+          "category": "mopar",
+          "fwp": 946,
+          "msrp": 1050,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "MRT; MRU (Sport family)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XDB",
+          "name": "Mopar Hinge-Gate Reinforcement",
+          "category": "mopar",
+          "fwp": 608,
+          "msrp": 675,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "N/C when W/AGB (Sport family) or W/AGB / W/EC1 (Rubicon).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9G",
+          "name": "Mopar Lower Body Side Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CS7",
+          "name": "Mopar Mesh Sunbonnet Top",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CMD",
+          "name": "Mopar Multi-Function Accessory Rail",
+          "category": "mopar",
+          "fwp": 248,
+          "msrp": 275,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CBQ",
+          "name": "Mopar Perforated Leather Black",
+          "category": "mopar",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "*E7 (Sport) / *K7 (Rubicon)",
+            "not_available_with": "*VL (Rubicon)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MFD",
+          "name": "Mopar Performance Satin Black Grille",
+          "category": "mopar",
+          "fwp": 356,
+          "msrp": 395,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 9
+          }
+        },
+        {
+          "code": "MHJ",
+          "name": "Mopar Satin Black Grille",
+          "category": "mopar",
+          "fwp": 356,
+          "msrp": 395,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CLP",
+          "name": "Mopar Plastic Door Sill Guards",
+          "category": "mopar",
+          "fwp": 113,
+          "msrp": 125,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "CLN",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MYL",
+          "name": "Mopar Single Hoop Grille Guard",
+          "category": "mopar",
+          "fwp": 266,
+          "msrp": 295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "MBA; MYT",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 10
+          }
+        },
+        {
+          "code": "CS3",
+          "name": "Mopar Solid Sunbonnet Top",
+          "category": "mopar",
+          "fwp": 266,
+          "msrp": 295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CLN",
+          "name": "Mopar Stainless Door Sill Guards",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CBS",
+          "name": "Mopar Stitched Leather Black",
+          "category": "mopar",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "*E7 (Sport) / *K7 (Rubicon)",
+            "not_available_with": "*VL; CBQ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "XEK",
+          "name": "Mopar Tool Kit JPP / Jeep",
+          "category": "mopar",
+          "fwp": 473,
+          "msrp": 525,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "M9F",
+          "name": "Mopar Upper Body Side Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "M9G",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CT9",
+          "name": "Mopar Windshield Tie Down",
+          "category": "mopar",
+          "fwp": 35,
+          "msrp": 40,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        }
+      ],
+      "paint_colors": [
+        {
+          "name": "'41",
+          "sales_code": "PJ5",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Anvil Clear Coat",
+          "sales_code": "PDS",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Black Clear Coat",
+          "sales_code": "PX8",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Bright White Clear Coat",
+          "sales_code": "PW7",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Firecracker Red Clear Coat",
+          "sales_code": "PRC",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Goldilocks",
+          "sales_code": "PYC",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "late",
+          "notes": "Late Availability",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Granite Crystal Met. Clear Coat",
+          "sales_code": "PAU",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Hydro Blue Pearl Coat",
+          "sales_code": "PBJ",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Mojito! Clear Coat",
+          "sales_code": "PGE",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Reign",
+          "sales_code": "PHT",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "late",
+          "notes": "Late Availability",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        }
+      ],
+      "paint_note": "Monotone Paint (APA) is standard/no-charge; the premium paint codes above are the extra-cost deltas over standard.",
+      "fleet_only_options": [
+        {
+          "code": "X9W",
+          "name": "F2M Connect Fleet 1YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 215,
+          "msrp": 240,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9X",
+          "name": "F2M Connect Fleet 3YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 586,
+          "msrp": 650,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9V",
+          "name": "F2M Connect Fleet 4YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 779,
+          "msrp": 865,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9S",
+          "name": "Mobilisights Fleet Plus Data Pkg 1YR",
+          "category": "fleet_telematics",
+          "fwp": 55,
+          "msrp": 60,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9T",
+          "name": "Mobilisights Fleet Plus Data Pkg 4YR",
+          "category": "fleet_telematics",
+          "fwp": 189,
+          "msrp": 210,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9C",
+          "name": "Mobilisights Fleet Prem Data Pkg 1YR",
+          "category": "fleet_telematics",
+          "fwp": 63,
+          "msrp": 70,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9D",
+          "name": "Mobilisights Fleet Prem Data Pkg 4YR",
+          "category": "fleet_telematics",
+          "fwp": 226,
+          "msrp": 250,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        }
+      ]
+    },
+    "JLU_4_door": {
+      "name": "Wrangler 4-Door (JLU)",
+      "doors": 4,
+      "destination_charge": {
+        "amount": 1995,
+        "amount_ak_hi": 2045,
+        "invoice": null,
+        "notes": "$1,995; $2,045 in AK/HI.",
+        "provenance": {
+          "source": "order_guide_2026",
+          "as_of_date": "2025-08-06",
+          "page": 2
+        }
+      },
+      "powertrains": [
+        {
+          "code_prefix": "23",
+          "engine": "3.6L V6 24V VVT (ERC)",
+          "engine_code": "ERC",
+          "transmission": "6-Speed Manual (DEM)",
+          "transmission_code": "DEM",
+          "is_base": true,
+          "availability": "late",
+          "notes": "Standard powertrain on Sport/Willys/Rubicon; base MSRP quoted for this config. Late Availability. NOT offered on Sahara or Sport RHD.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 2
+          }
+        },
+        {
+          "code_prefix": "22",
+          "engine": "2.0L I4 DOHC DI Turbo w/ESS (EC1)",
+          "engine_code": "EC1",
+          "transmission": "8-Spd Auto 850RE (DFT)",
+          "transmission_code": "DFT",
+          "is_base": false,
+          "availability": "available",
+          "notes": "On Sport/Willys/Rubicon: +$2,500 MSRP over V6 manual. On Sahara & Sport RHD the 2.0T auto (22G/22A) is the base engine (N/C).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 2
+          }
+        },
+        {
+          "code_prefix": "24",
+          "engine": "3.6L V6 24V VVT (ERC)",
+          "engine_code": "ERC",
+          "transmission": "8-Spd Auto 850RE (DFT)",
+          "transmission_code": "DFT",
+          "is_base": false,
+          "availability": "available",
+          "notes": "V6 with 8-speed automatic. On Sport family: +$4,500 MSRP over V6 manual. On Sahara: 24G is +$2,000 over base 2.0T. 4-door only (not offered on 2-door).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 2
+          }
+        }
+      ],
+      "powertrain_note": "4-door offers three powertrains: 23-series V6 6-spd manual (base on Sport/Willys/Rubicon, late availability), 22-series 2.0T 8-spd auto, and 24-series V6 8-spd auto. Sahara offers only 22G (2.0T, base) and 24G (V6 auto, +$2,000); no manual. Sport RHD offers only 22A (2.0T).",
+      "trims": [
+        {
+          "name": "Sport",
+          "model_code": "JLJL74",
+          "trim_family": "Sport",
+          "base_msrp": 36990,
+          "base_fwp": 36214,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23B",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 36214,
+              "msrp": 36990,
+              "invoice": null,
+              "availability": "late",
+              "notes": "Base config (V6 manual, late availability)"
+            },
+            {
+              "qop_code": "22B",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 38464,
+              "msrp": 39490,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            },
+            {
+              "qop_code": "24B",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 40264,
+              "msrp": 41490,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Sport is the base Quick Order Package; adds no content over base model.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Sport S",
+          "model_code": "JLJL74",
+          "trim_family": "Sport",
+          "base_msrp": 41240,
+          "base_fwp": 40040,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23S",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 40040,
+              "msrp": 41240,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22S",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 42290,
+              "msrp": 43740,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            },
+            {
+              "qop_code": "24S",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 44090,
+              "msrp": 45740,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "BGG",
+              "description": "Advanced Brake Assist"
+            },
+            {
+              "code": "LMG",
+              "description": "Automatic Headlamps"
+            },
+            {
+              "code": "GMA",
+              "description": "Corning Gorilla Glass"
+            },
+            {
+              "code": "GCD",
+              "description": "Deep Tint Sunscreen Windows"
+            },
+            {
+              "code": "NH1",
+              "description": "Enhanced Adaptive Cruise Control"
+            },
+            {
+              "code": "LSU",
+              "description": "Full Speed Fwd Collision Warn Plus"
+            },
+            {
+              "code": "GTB",
+              "description": "Power Heated Mirrors"
+            },
+            {
+              "code": "SCJ",
+              "description": "Premium Wrapped Steering Wheel"
+            },
+            {
+              "code": "LSA",
+              "description": "Security Alarm"
+            },
+            {
+              "code": "GND",
+              "description": "Sun Visors w/Illum Vanity Mirrors"
+            }
+          ],
+          "package_content_note": "Net package value over Sport: $4,250 MSRP / $3,826 FWP.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Willys",
+          "model_code": "JLJL74",
+          "trim_family": "Sport",
+          "base_msrp": 45310,
+          "base_fwp": 43702,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23W",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 43702,
+              "msrp": 45310,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22W",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 45952,
+              "msrp": 47810,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            },
+            {
+              "qop_code": "24W",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 47752,
+              "msrp": 49810,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "WFY",
+              "description": "17x7.5 Painted Black Wheels"
+            },
+            {
+              "code": "DMF",
+              "description": "4.10 Rear Axle Ratio"
+            },
+            {
+              "code": "MS3",
+              "description": "4-Wheel Drive Swing Gate Decal"
+            },
+            {
+              "code": "XF2",
+              "description": "7 and 4 Pin Wiring Harness"
+            },
+            {
+              "code": "BGG",
+              "description": "Advanced Brake Assist"
+            },
+            {
+              "code": "LMG",
+              "description": "Automatic Headlamps"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            },
+            {
+              "code": "MW7",
+              "description": "Black Grille"
+            },
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            },
+            {
+              "code": "DS7",
+              "description": "Conventional Differential Frt Axle"
+            },
+            {
+              "code": "GMA",
+              "description": "Corning Gorilla Glass"
+            },
+            {
+              "code": "DJV",
+              "description": "Dana M210 Wide HD Tube Front Axle"
+            },
+            {
+              "code": "DRF",
+              "description": "Dana M220 Wide Rear Axle"
+            },
+            {
+              "code": "LPY",
+              "description": "Daytime Running Lamp LED Accents"
+            },
+            {
+              "code": "GCD",
+              "description": "Deep Tint Sunscreen Windows"
+            },
+            {
+              "code": "DSH",
+              "description": "E-Locker Rear Axle"
+            },
+            {
+              "code": "NH1",
+              "description": "Enhanced Adaptive Cruise Control"
+            },
+            {
+              "code": "LNV",
+              "description": "Front LED Fog Lamps"
+            },
+            {
+              "code": "MDA",
+              "description": "Front License Plate Bracket"
+            },
+            {
+              "code": "LSU",
+              "description": "Full Speed Fwd Collision Warn Plus"
+            },
+            {
+              "code": "Z1V",
+              "description": "GVW Rating - 5675#"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LPX",
+              "description": "LED Premium Reflector Headlamps"
+            },
+            {
+              "code": "TWG",
+              "description": "LT285/70R17C BSW M/T Tires"
+            },
+            {
+              "code": "MMZ",
+              "description": "MIC Rubicon Highline Flare"
+            },
+            {
+              "code": "MBU",
+              "description": "Mold In Color Bumper w/Gloss Black"
+            },
+            {
+              "code": "CWA",
+              "description": "Mopar All-Weather Floor Mats"
+            },
+            {
+              "code": "XG7",
+              "description": "Off-Road Plus Mode"
+            },
+            {
+              "code": "GTB",
+              "description": "Power Heated Mirrors"
+            },
+            {
+              "code": "SCJ",
+              "description": "Premium Wrapped Steering Wheel"
+            },
+            {
+              "code": "MEF",
+              "description": "Rock Protection Sill Rails"
+            },
+            {
+              "code": "LSA",
+              "description": "Security Alarm"
+            },
+            {
+              "code": "GND",
+              "description": "Sun Visors w/Illum Vanity Mirrors"
+            },
+            {
+              "code": "MT6",
+              "description": "Willys Hood Decal"
+            },
+            {
+              "code": "SDV",
+              "description": "Willys Suspension"
+            }
+          ],
+          "package_content_note": "Net package value over Sport: $8,320 MSRP / $7,488 FWP.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 3
+          }
+        },
+        {
+          "name": "Sahara",
+          "model_code": "JLJP74",
+          "trim_family": "Sahara",
+          "base_msrp": 47885,
+          "base_fwp": 46449,
+          "base_invoice": null,
+          "base_powertrain_prefix": "22",
+          "configurations": [
+            {
+              "qop_code": "22G",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 46449,
+              "msrp": 47885,
+              "invoice": null,
+              "availability": "available",
+              "notes": "Base config (2.0T auto)"
+            },
+            {
+              "qop_code": "24G",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 48249,
+              "msrp": 49885,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Sahara is its own model code (JLJP74). Base engine is the 2.0T auto (22G, N/C); V6 auto (24G) is +$2,000. No manual offered. The guide does not print a line-item content list for the Sahara base package on the model page.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 7
+          }
+        },
+        {
+          "name": "Rubicon",
+          "model_code": "JLJS74",
+          "trim_family": "Rubicon",
+          "base_msrp": 49270,
+          "base_fwp": 47546,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23R",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 47546,
+              "msrp": 49270,
+              "invoice": null,
+              "availability": "late",
+              "notes": "Base config (V6 manual, late availability)"
+            },
+            {
+              "qop_code": "22R",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 49796,
+              "msrp": 51770,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            },
+            {
+              "qop_code": "24R",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 51596,
+              "msrp": 53770,
+              "invoice": null,
+              "availability": "available",
+              "notes": null
+            }
+          ],
+          "package_content": [
+            {
+              "code": "RHY",
+              "description": "12.3\" Touchscreen Display"
+            },
+            {
+              "code": "RTQ",
+              "description": "4G LTE Wi-Fi Hot Spot"
+            },
+            {
+              "code": "CKA",
+              "description": "Acoustic Front Seat Area Carpet"
+            },
+            {
+              "code": "GAP",
+              "description": "Acoustic Laminated Front Door Glass"
+            },
+            {
+              "code": "RC4",
+              "description": "Alpine Premium Audio System"
+            },
+            {
+              "code": "RFP",
+              "description": "Apple CarPlay"
+            },
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "HT3",
+              "description": "Body Color 3-Piece Hard Top"
+            },
+            {
+              "code": "MHV",
+              "description": "Body Color Rubicon Highline Flare"
+            },
+            {
+              "code": "RTV",
+              "description": "Connected Travel & Traffic Services"
+            },
+            {
+              "code": "RTM",
+              "description": "Connectivity - US/Canada"
+            },
+            {
+              "code": "JVG",
+              "description": "Driver Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "JWG",
+              "description": "Frt Pass Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "RF5",
+              "description": "Google Android Auto"
+            },
+            {
+              "code": "RE8",
+              "description": "HD Radio"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XNY",
+              "description": "Integrated Off-Road Camera"
+            },
+            {
+              "code": "XRB",
+              "description": "Integrated Voice Command w/Bluetooth"
+            },
+            {
+              "code": "CVP",
+              "description": "Leather Wrapped Park Brake Handle"
+            },
+            {
+              "code": "CVW",
+              "description": "Leather Wrapped Shift Knob"
+            },
+            {
+              "code": "CHD",
+              "description": "Mopar Hardtop Headliner"
+            },
+            {
+              "code": "*VL",
+              "description": "Nappa Leather Seats"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            },
+            {
+              "code": "JPU",
+              "description": "Power 4-Way Driver Lumbar Adjust"
+            },
+            {
+              "code": "JRS",
+              "description": "Power 4-Way Passenger Lumbar Adjust"
+            },
+            {
+              "code": "CBF",
+              "description": "Premium Door Trim Panel"
+            },
+            {
+              "code": "GNK",
+              "description": "Rear View Auto Dim Mirror"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            },
+            {
+              "code": "RTU",
+              "description": "SiriusXM with 360L"
+            },
+            {
+              "code": "MC6",
+              "description": "Steel Front Bumper"
+            },
+            {
+              "code": "MD6",
+              "description": "Steel Rear Bumper"
+            },
+            {
+              "code": "AHC",
+              "description": "Trailer Tow Prep Package"
+            },
+            {
+              "code": "UBX",
+              "description": "Uconnect 5 Nav w/ 12.3\" Display (USA)"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "package_content_note": "Content shown is the Rubicon standard equipment highlighted on the guide's package-content page (page 11). Rubicon is its own model code (JLJS74).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 12
+          }
+        },
+        {
+          "name": "Rubicon X",
+          "model_code": "JLJS74",
+          "trim_family": "Rubicon",
+          "base_msrp": 59220,
+          "base_fwp": 56502,
+          "base_invoice": null,
+          "base_powertrain_prefix": "23",
+          "configurations": [
+            {
+              "qop_code": "23Y",
+              "powertrain_prefix": "23",
+              "powertrain": "V6 6-spd manual",
+              "fwp": 56502,
+              "msrp": 59220,
+              "invoice": null,
+              "availability": "late",
+              "notes": null
+            },
+            {
+              "qop_code": "22Y",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 61452,
+              "msrp": 64720,
+              "invoice": null,
+              "availability": "available",
+              "notes": "Includes 35-inch tires"
+            },
+            {
+              "qop_code": "24Y",
+              "powertrain_prefix": "24",
+              "powertrain": "V6 8-spd auto",
+              "fwp": 63252,
+              "msrp": 66720,
+              "invoice": null,
+              "availability": "available",
+              "notes": "Includes 35-inch tires"
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Rubicon X = Rubicon + Rubicon X package. Net package value over Rubicon: W/23- (V6 manual) $9,950 MSRP / $8,956 FWP; W/22- or W/24- $12,950 MSRP / $11,656 FWP. The 22Y/24Y configs include the factory 35-inch tire package. Rubicon X adds Nappa leather (VL) at no charge; the guide does not print a line-item content list for the Rubicon X package.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 12
+          }
+        },
+        {
+          "name": "Sport RHD",
+          "model_code": "JLUL74",
+          "trim_family": "Sport",
+          "base_msrp": 48740,
+          "base_fwp": 47521,
+          "base_invoice": null,
+          "base_powertrain_prefix": "22",
+          "configurations": [
+            {
+              "qop_code": "22A",
+              "powertrain_prefix": "22",
+              "powertrain": "2.0T 8-spd auto",
+              "fwp": 47521,
+              "msrp": 48740,
+              "invoice": null,
+              "availability": "available",
+              "notes": "Base config (2.0T auto); right-hand-drive"
+            }
+          ],
+          "package_content": null,
+          "package_content_note": "Right-hand-drive Sport (JLUL74), typically a fleet/mail-route variant. Single configuration (22A, 2.0T auto). The guide devotes pages 16-18 to this model; only the base price is captured here. Detailed RHD options were not fully enumerated.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 16
+          }
+        }
+      ],
+      "option_packages": [
+        {
+          "code": "ADA",
+          "name": "LED Headlamp and Fog Lamp Group",
+          "category": "option_group",
+          "fwp": 1526,
+          "msrp": 1695,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": [
+            {
+              "code": "LNV",
+              "description": "Front LED Fog Lamps"
+            },
+            {
+              "code": "LPX",
+              "description": "LED Premium Reflector Headlamps"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "ADH",
+          "name": "Trailer Tow and Aux Switch Group",
+          "category": "option_group",
+          "fwp": 1076,
+          "msrp": 1195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara"
+          ],
+          "contents": [
+            {
+              "code": "XF2",
+              "description": "7 and 4 Pin Wiring Harness"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            },
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "N/C on Willys (22W/23W) where content is standard.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "ADH",
+          "name": "Trailer Tow and Aux Switch Group (Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 86,
+          "msrp": 95,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "XFN",
+              "description": "Class II Receiver Hitch"
+            },
+            {
+              "code": "LH2",
+              "description": "Aux Switches"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "On Rubicon priced $95 MSRP: includes XFN and LH2; XF2 is standard.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "AD3",
+          "name": "Steel Bumper Group",
+          "category": "option_group",
+          "fwp": 1346,
+          "msrp": 1495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "MC6",
+              "description": "Steel Front Bumper"
+            },
+            {
+              "code": "MD6",
+              "description": "Steel Rear Bumper"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "AJ1",
+          "name": "Safety Group",
+          "category": "option_group",
+          "fwp": 1436,
+          "msrp": 1595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys"
+          ],
+          "contents": [
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LAY",
+              "description": "LED Taillamps"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "AJ1",
+          "name": "Safety Group (Sahara/Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 1346,
+          "msrp": 1495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "LMS",
+              "description": "Auto High Beam Headlamp Control"
+            },
+            {
+              "code": "XAN",
+              "description": "Blind Spot and Cross Path Detection"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "LAY",
+              "description": "LED Taillamps"
+            },
+            {
+              "code": "XAA",
+              "description": "ParkSense Rear Park Assist System"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "AJK",
+          "name": "Convenience Group",
+          "category": "option_group",
+          "fwp": 2066,
+          "msrp": 2295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys"
+          ],
+          "contents": [
+            {
+              "code": "GXD",
+              "description": "Passive Entry, Front Door Locks"
+            },
+            {
+              "code": "HAB",
+              "description": "Air Conditioning w/Auto Temp Control"
+            },
+            {
+              "code": "JMA",
+              "description": "Air Filtering"
+            },
+            {
+              "code": "JAL",
+              "description": "Cluster 7.0\" TFT Color Display"
+            },
+            {
+              "code": "RSR",
+              "description": "Emergency / Assistance Call"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XBM",
+              "description": "Remote Start System"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "constraints": {
+            "must_have": "DEM+ERC or DFT+EC1",
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "AJK",
+          "name": "Convenience Group (Rubicon pricing)",
+          "category": "option_group",
+          "fwp": 1166,
+          "msrp": 1295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "GXD",
+              "description": "Passive Entry, Front Door Locks"
+            },
+            {
+              "code": "HAB",
+              "description": "Air Conditioning w/Auto Temp Control"
+            },
+            {
+              "code": "JMA",
+              "description": "Air Filtering"
+            },
+            {
+              "code": "JAL",
+              "description": "Cluster 7.0\" TFT Color Display"
+            },
+            {
+              "code": "RSR",
+              "description": "Emergency / Assistance Call"
+            },
+            {
+              "code": "JPM",
+              "description": "Heated Front Seats"
+            },
+            {
+              "code": "NHS",
+              "description": "Heated Steering Wheel"
+            },
+            {
+              "code": "XBM",
+              "description": "Remote Start System"
+            },
+            {
+              "code": "XGD",
+              "description": "Universal Garage Door Opener"
+            }
+          ],
+          "constraints": {
+            "must_have": "DEM+ERC or DFT+EC1",
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "AJY",
+          "name": "Technology Group",
+          "category": "option_group",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "RHY",
+              "description": "12.3\" Touchscreen Display"
+            },
+            {
+              "code": "RTQ",
+              "description": "4G LTE Wi-Fi Hot Spot"
+            },
+            {
+              "code": "RC4",
+              "description": "Alpine Premium Audio System"
+            },
+            {
+              "code": "RFP",
+              "description": "Apple CarPlay"
+            },
+            {
+              "code": "RTV",
+              "description": "Connected Travel & Traffic Services"
+            },
+            {
+              "code": "RTM",
+              "description": "Connectivity - US/Canada"
+            },
+            {
+              "code": "RF5",
+              "description": "Google Android Auto"
+            },
+            {
+              "code": "JLN",
+              "description": "GPS Navigation"
+            },
+            {
+              "code": "RE8",
+              "description": "HD Radio"
+            },
+            {
+              "code": "RTF",
+              "description": "Integrated Center Stack Radio"
+            },
+            {
+              "code": "XNY",
+              "description": "Integrated Off-Road Camera"
+            },
+            {
+              "code": "XRB",
+              "description": "Integrated Voice Command w/Bluetooth"
+            },
+            {
+              "code": "GNK",
+              "description": "Rear View Auto Dim Mirror"
+            },
+            {
+              "code": "X9B",
+              "description": "SiriusXM Radio Service"
+            },
+            {
+              "code": "RTU",
+              "description": "SiriusXM with 360L"
+            },
+            {
+              "code": "UBX",
+              "description": "Uconnect 5 Nav w/ 12.3\" Display (USA)"
+            }
+          ],
+          "constraints": {
+            "must_have": "RC4",
+            "not_available_with": "RCH",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "AEN",
+          "name": "Dual Top Group",
+          "category": "top",
+          "fwp": 2246,
+          "msrp": 2495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": [
+            {
+              "code": "HT1",
+              "description": "Black 3-Piece Hard Top (HT3 Body Color on some configs)"
+            },
+            {
+              "code": "ST2",
+              "description": "Premium Black Sunrider Soft Top (ST3 Tan on some configs)"
+            },
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "Hard top + premium sunrider soft top. N/A W/STJ (Sky top).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "STJ",
+          "name": "Sky One-Touch Power Top",
+          "category": "top",
+          "fwp": 3596,
+          "msrp": 3995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": [
+            {
+              "code": "CB5",
+              "description": "Power Top Quarter Window Storage Bag"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            },
+            {
+              "code": "GER",
+              "description": "Removable Rear Quarter Windows"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AEN",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "AYY",
+          "name": "Sahara Popular Equipment Group",
+          "category": "option_group",
+          "fwp": 2696,
+          "msrp": 2995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara"
+          ],
+          "contents": [
+            {
+              "code": "(pkg)",
+              "description": "AJ1 Safety Group content"
+            },
+            {
+              "code": "(pkg)",
+              "description": "AJY Technology Group content"
+            },
+            {
+              "code": "*NL",
+              "description": "McKinley Trimmed Seats"
+            },
+            {
+              "code": "RC4",
+              "description": "Alpine Premium Audio System"
+            },
+            {
+              "code": "MRK",
+              "description": "Side Steps"
+            }
+          ],
+          "constraints": {
+            "must_have": "*NL",
+            "not_available_with": "MRT; MRU",
+            "only_one_of": null
+          },
+          "notes": "Bundles AJ1 + AJY content plus McKinley seats, Alpine audio and side steps.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "AGB",
+          "name": "Xtreme 35 Tire Package",
+          "category": "wheels_tires",
+          "fwp": 4406,
+          "msrp": 4895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "WF8",
+              "description": "17x8.0 Machined Wheels w/Blk Pockets"
+            },
+            {
+              "code": "SDG",
+              "description": "35\" Tire Suspension"
+            },
+            {
+              "code": "DMU",
+              "description": "4.56 Rear Axle Ratio"
+            },
+            {
+              "code": "BR4",
+              "description": "Anti-Lock 4-Wheel Disc Perf Brakes"
+            },
+            {
+              "code": "MP8",
+              "description": "Delete 4-Whl Drive Swing Gate Decal"
+            },
+            {
+              "code": "Z1U",
+              "description": "GVW Rating - 6250#"
+            },
+            {
+              "code": "MBC",
+              "description": "Injection Molded Black Rear Bumper"
+            },
+            {
+              "code": "TVC",
+              "description": "LT315/70R17C 113/110S Tires"
+            },
+            {
+              "code": "MMZ",
+              "description": "MIC Rubicon Highline Flare"
+            },
+            {
+              "code": "XDB",
+              "description": "Mopar Hinge-Gate Reinforcement"
+            },
+            {
+              "code": "CXK",
+              "description": "Mopar Jack Spacer"
+            },
+            {
+              "code": "XFP",
+              "description": "Mopar Tire Relocation Kit"
+            },
+            {
+              "code": "NLA",
+              "description": "Wheel Flare Extensions"
+            }
+          ],
+          "constraints": {
+            "must_have": "EC1/DFT (2.0T or 8-spd auto)",
+            "not_available_with": "Sport family: 22W/23W. Rubicon: DEM; WAJ; WFE; WFV",
+            "only_one_of": null
+          },
+          "notes": "Factory 35-inch tire package. On Rubicon requires the DFT 8-speed auto.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XE5",
+          "name": "Warn Winch",
+          "category": "option_group",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "MBA",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "MRK",
+          "name": "Side Steps",
+          "category": "exterior",
+          "fwp": 86,
+          "msrp": 95,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "MMU",
+            "only_one_of": "MRK, MRT or MRU"
+          },
+          "notes": "N/C when W/AYY.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        }
+      ],
+      "seat_options": [
+        {
+          "code": "*VL",
+          "name": "Nappa Leather Seats",
+          "category": "seat",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "JVG",
+              "description": "Driver Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "JWG",
+              "description": "Frt Pass Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "CVP",
+              "description": "Leather Wrapped Park Brake Handle"
+            },
+            {
+              "code": "CVW",
+              "description": "Leather Wrapped Shift Knob"
+            },
+            {
+              "code": "JPU",
+              "description": "Power 4-Way Driver Lumbar Adjust"
+            },
+            {
+              "code": "JRS",
+              "description": "Power 4-Way Passenger Lumbar Adjust"
+            },
+            {
+              "code": "CBF",
+              "description": "Premium Door Trim Panel"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "W/2_R (Rubicon) $1,995 MSRP; W/2_Y (Rubicon X) N/C. Trim code VLX9.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 15
+          }
+        },
+        {
+          "code": "*NL",
+          "name": "McKinley Trimmed Seats",
+          "category": "seat",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara"
+          ],
+          "contents": [
+            {
+              "code": "JVG",
+              "description": "Driver Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "JWG",
+              "description": "Frt Pass Seat - Power Adjust 8-Way"
+            },
+            {
+              "code": "CWT",
+              "description": "Hard Seat Back"
+            },
+            {
+              "code": "CVP",
+              "description": "Leather Wrapped Park Brake Handle"
+            },
+            {
+              "code": "CVW",
+              "description": "Leather Wrapped Shift Knob"
+            },
+            {
+              "code": "JPU",
+              "description": "Power 4-Way Driver Lumbar Adjust"
+            },
+            {
+              "code": "JRS",
+              "description": "Power 4-Way Passenger Lumbar Adjust"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "W/2_G (Sahara) $1,995 MSRP; W/AYY N/C. Trim code NLX9.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 10
+          }
+        },
+        {
+          "code": "(S)",
+          "name": "Cloth Low-Back Bucket Seats",
+          "category": "seat",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "Standard. Trim code E7X9 (Sport/Sahara) / K7X9 (Rubicon).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        }
+      ],
+      "standalone_options": [
+        {
+          "code": "WFH",
+          "name": "17x7.5 Machined Whls w/Black Pockets",
+          "category": "wheels",
+          "fwp": 986,
+          "msrp": 1095,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "WFE",
+          "name": "17x7.5 Mach Whls w/Black Pockets",
+          "category": "wheels",
+          "fwp": 986,
+          "msrp": 1095,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "22Y; AGB; TVC",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "WPD",
+          "name": "18x7.5 Mach/Painted Gray Whls",
+          "category": "wheels",
+          "fwp": 986,
+          "msrp": 1095,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "TP3",
+          "name": "245/75R17 All-Terrain Tires",
+          "category": "tires",
+          "fwp": 446,
+          "msrp": 495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AGB",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "DMS",
+          "name": "4.88 Rear Axle Ratio",
+          "category": "drivetrain",
+          "fwp": 896,
+          "msrp": 995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "DEM",
+            "not_available_with": "DFT",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "RC4",
+          "name": "Alpine Premium Audio System",
+          "category": "audio",
+          "fwp": 1436,
+          "msrp": 1595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "N/C when W/AYY (Sahara). 'P' (packaged) on Rubicon X.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CKJ",
+          "name": "Black Vinyl Floor Covering",
+          "category": "interior",
+          "fwp": 896,
+          "msrp": 995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "HT3",
+          "name": "Body Color 3-Piece Hard Top",
+          "category": "top",
+          "fwp": 1976,
+          "msrp": 2195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "STJ (Sahara)",
+            "only_one_of": "HT1 or HT3 (Rubicon)"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "MHV",
+          "name": "Body Color Rubicon Highline Flare",
+          "category": "exterior",
+          "fwp": 446,
+          "msrp": 495,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "GCD",
+          "name": "Deep Tint Sunscreen Windows",
+          "category": "exterior",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "'P' (packaged) on Sport S and Willys.",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XWX",
+          "name": "Jeep Trail Rated Kit",
+          "category": "appearance",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "2S6",
+          "name": "MyFlexCare Service Plan",
+          "category": "service",
+          "fwp": 203,
+          "msrp": 225,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MDA",
+          "name": "Front License Plate Bracket",
+          "category": "exterior",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "applies_to_trims": [
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 8
+          }
+        },
+        {
+          "code": "CWJ",
+          "name": "Soft Top Window Storage Bag",
+          "category": "top",
+          "fwp": 68,
+          "msrp": 75,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AEN or STA",
+            "not_available_with": "HT1; HT3; STC; STJ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "HT1",
+          "name": "Black 3-Piece Hard Top",
+          "category": "top",
+          "fwp": 1706,
+          "msrp": 1895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Rubicon"
+          ],
+          "contents": [
+            {
+              "code": "CS2",
+              "description": "Freedom Panel Storage Bag"
+            },
+            {
+              "code": "ST8",
+              "description": "No Soft Top"
+            },
+            {
+              "code": "GFA",
+              "description": "Rear Window Defroster"
+            },
+            {
+              "code": "JHB",
+              "description": "Rear Window Wiper/Washer"
+            }
+          ],
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "STJ",
+            "only_one_of": "HT1 or HT3"
+          },
+          "notes": "N/C when W/AEN (Dual Top).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9E",
+          "name": "Mopar 1941 Hood Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XAD",
+          "name": "Mopar Air Compressor",
+          "category": "mopar",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "22W; 23W (Sport family)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CWA",
+          "name": "Mopar All-Weather Floor Mats",
+          "category": "mopar",
+          "fwp": 153,
+          "msrp": 170,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "CKJ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9D",
+          "name": "Mopar American Flag Hood Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "M9E",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XJD",
+          "name": "Mopar Black Fuel Filler Door",
+          "category": "mopar",
+          "fwp": 130,
+          "msrp": 145,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MRU",
+          "name": "Mopar Black Tubular Side Steps",
+          "category": "mopar",
+          "fwp": 653,
+          "msrp": 725,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AYY (Sahara)",
+            "only_one_of": "MRT or MRU"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CK5",
+          "name": "Mopar Cargo Tub Liner",
+          "category": "mopar",
+          "fwp": 40,
+          "msrp": 45,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "CLN or CLP",
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MRT",
+          "name": "Mopar Chrome Tube Steps",
+          "category": "mopar",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AYY (Sahara)",
+            "only_one_of": "MRT or MRU"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "LFR",
+          "name": "Mopar Doors Off Mirror Kit",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MYT",
+          "name": "Mopar Grille Guard Triple Loop",
+          "category": "mopar",
+          "fwp": 580,
+          "msrp": 645,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "MBA",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 13
+          }
+        },
+        {
+          "code": "CHD",
+          "name": "Mopar Hardtop Headliner",
+          "category": "mopar",
+          "fwp": 590,
+          "msrp": 655,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "STJ (Sahara)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "MMU",
+          "name": "Mopar HD Rock Slider w/Step Assist",
+          "category": "mopar",
+          "fwp": 946,
+          "msrp": 1050,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "MRT; MRU (Sport); AYY; MRT; MRU (Sahara)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "XDB",
+          "name": "Mopar Hinge-Gate Reinforcement",
+          "category": "mopar",
+          "fwp": 608,
+          "msrp": 675,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": "N/C when W/AGB (Sport/Rubicon) or W/DFT (Rubicon).",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "M9G",
+          "name": "Mopar Lower Body Side Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CS7",
+          "name": "Mopar Mesh Sunbonnet Top",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "STJ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CMD",
+          "name": "Mopar Multi-Function Accessory Rail",
+          "category": "mopar",
+          "fwp": 248,
+          "msrp": 275,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 4
+          }
+        },
+        {
+          "code": "CBQ",
+          "name": "Mopar Perforated Leather Black",
+          "category": "mopar",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "*E7 (Sport/Sahara) / *K7 (Rubicon)",
+            "not_available_with": "*NL; AYY (Sahara); *RL; *VL (Rubicon)",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "MFD",
+          "name": "Mopar Performance Satin Black Grille",
+          "category": "mopar",
+          "fwp": 356,
+          "msrp": 395,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 14
+          }
+        },
+        {
+          "code": "MHJ",
+          "name": "Mopar Satin Black Grille",
+          "category": "mopar",
+          "fwp": 356,
+          "msrp": 395,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CLP",
+          "name": "Mopar Plastic Door Sill Guards",
+          "category": "mopar",
+          "fwp": 113,
+          "msrp": 125,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "CLN",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "MYL",
+          "name": "Mopar Single Hoop Grille Guard",
+          "category": "mopar",
+          "fwp": 266,
+          "msrp": 295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "AD3 or MC6",
+            "not_available_with": "MBA; MYT",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 14
+          }
+        },
+        {
+          "code": "CS3",
+          "name": "Mopar Solid Sunbonnet Top",
+          "category": "mopar",
+          "fwp": 266,
+          "msrp": 295,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "STJ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CLN",
+          "name": "Mopar Stainless Door Sill Guards",
+          "category": "mopar",
+          "fwp": 176,
+          "msrp": 195,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CBS",
+          "name": "Mopar Stitched Leather Black",
+          "category": "mopar",
+          "fwp": 1796,
+          "msrp": 1995,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": "*E7 / *K7",
+            "not_available_with": "*NL; AYY; *RL; *VL; CBQ",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "MHW",
+          "name": "Mopar Sunrider for Hardtop",
+          "category": "top",
+          "fwp": 850,
+          "msrp": 945,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Willys",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "AEN",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "XEK",
+          "name": "Mopar Tool Kit JPP / Jeep",
+          "category": "mopar",
+          "fwp": 473,
+          "msrp": 525,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "M9F",
+          "name": "Mopar Upper Body Side Graphic",
+          "category": "mopar",
+          "fwp": 220,
+          "msrp": 245,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "Sport",
+            "Sport S",
+            "Sahara",
+            "Rubicon",
+            "Rubicon X"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": "M9G",
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "CT9",
+          "name": "Mopar Windshield Tie Down",
+          "category": "mopar",
+          "fwp": 35,
+          "msrp": 40,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": null
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        }
+      ],
+      "paint_colors": [
+        {
+          "name": "'41",
+          "sales_code": "PJ5",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Anvil Clear Coat",
+          "sales_code": "PDS",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Black Clear Coat",
+          "sales_code": "PX8",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Bright White Clear Coat",
+          "sales_code": "PW7",
+          "fwp": 0,
+          "msrp": 0,
+          "invoice": null,
+          "is_no_charge": true,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Firecracker Red Clear Coat",
+          "sales_code": "PRC",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Goldilocks",
+          "sales_code": "PYC",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "late",
+          "notes": "Late Availability",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Granite Crystal Met. Clear Coat",
+          "sales_code": "PAU",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Hydro Blue Pearl Coat",
+          "sales_code": "PBJ",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Mojito! Clear Coat",
+          "sales_code": "PGE",
+          "fwp": 536,
+          "msrp": 595,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "available",
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        },
+        {
+          "name": "Reign",
+          "sales_code": "PHT",
+          "fwp": 806,
+          "msrp": 895,
+          "invoice": null,
+          "is_no_charge": false,
+          "availability": "late",
+          "notes": "Late Availability",
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 6
+          }
+        }
+      ],
+      "paint_note": "Monotone Paint (APA) is standard/no-charge; the premium paint codes above are the extra-cost deltas over standard.",
+      "fleet_only_options": [
+        {
+          "code": "X9W",
+          "name": "F2M Connect Fleet 1YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 215,
+          "msrp": 240,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9X",
+          "name": "F2M Connect Fleet 3YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 586,
+          "msrp": 650,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9V",
+          "name": "F2M Connect Fleet 4YR Fleet Premium",
+          "category": "fleet_telematics",
+          "fwp": 779,
+          "msrp": 865,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9S",
+          "name": "Mobilisights Fleet Plus Data Pkg 1YR",
+          "category": "fleet_telematics",
+          "fwp": 55,
+          "msrp": 60,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9T",
+          "name": "Mobilisights Fleet Plus Data Pkg 4YR",
+          "category": "fleet_telematics",
+          "fwp": 189,
+          "msrp": 210,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9C",
+          "name": "Mobilisights Fleet Prem Data Pkg 1YR",
+          "category": "fleet_telematics",
+          "fwp": 63,
+          "msrp": 70,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        },
+        {
+          "code": "X9D",
+          "name": "Mobilisights Fleet Prem Data Pkg 4YR",
+          "category": "fleet_telematics",
+          "fwp": 226,
+          "msrp": 250,
+          "invoice": null,
+          "is_no_charge": false,
+          "applies_to_trims": [
+            "all"
+          ],
+          "contents": null,
+          "constraints": {
+            "must_have": null,
+            "not_available_with": null,
+            "only_one_of": "X9C, X9D, X9S, X9T, X9V, X9W, X9X"
+          },
+          "notes": null,
+          "provenance": {
+            "source": "order_guide_2026",
+            "as_of_date": "2025-08-06",
+            "page": 5
+          }
+        }
+      ]
+    }
+  }
+}
