@@ -9,6 +9,19 @@ Execution instructions for spawning tactical sub-contexts. This file is prompts 
 3. Sub-context writes its output to the specified path
 4. Return to the strategic hub to review before spawning downstream work
 
+## Git model for delegated contexts
+
+Each workstream runs on its own branch. The sub-context:
+- Creates and works on a branch named after the task slug (e.g., `discovery-pass`, `parse-order-guides`)
+- Commits its work as it goes — small, self-contained commits with clear messages
+- Does **NOT** push to `origin`
+- Does **NOT** merge to `main` and does **NOT** delete branches
+- Returns the branch name in its final message so the strategic hub can review and integrate
+
+The strategic hub reviews the branch, merges to `main` (squash for cleaner history), pushes, and deletes the branch.
+
+For parallel spawns of independent workstreams, use `isolation: "worktree"` on the `Agent` tool invocation so each agent gets its own checkout on its own branch — avoids filesystem and git-state collisions. Sequential spawns don't need this.
+
 ---
 
 ## #5 — Discovery pass (variable taxonomy + source validation)
@@ -56,6 +69,12 @@ Scope boundaries:
 Report format: comprehensive but well-organized. Use tables. Flag confidence levels on source claims.
 
 When done, stop. Do not proceed to modeling or data collection.
+
+Git:
+- Work on branch `discovery-pass` (create it: `git checkout -b discovery-pass`)
+- Commit as you go with clear messages
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
 ```
 
 ---
@@ -105,6 +124,12 @@ Scope boundaries:
 - Do NOT design the scenario builder or engine — just structure the source data
 
 When done, stop. Return the two files for review.
+
+Git:
+- Work on branch `parse-order-guides` (create it: `git checkout -b parse-order-guides`)
+- Commit as you go with clear messages
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
 ```
 
 ---
@@ -113,6 +138,7 @@ When done, stop. Return the two files for review.
 
 - **Spawn when:** provenance framework locked AND #6 (config data) complete
 - **Agent type:** `general-purpose`
+- **Branch:** `tco-framework`
 - **Output:** `calc/` directory with sub-models + tests
 - **Status:** SKELETON — prompt to be written when dependencies clear
 
@@ -127,6 +153,7 @@ Blockers:
 
 - **Spawn when:** #5 (source validation) complete AND #8 (TCO framework) complete AND 4xe scope locked
 - **Agent type:** `general-purpose`
+- **Branch:** `used-baseline`
 - **Output:** `scenarios/used_baseline.md` + `scenarios/index.yaml`
 - **Status:** SKELETON — prompt to be written when dependencies clear
 
@@ -141,6 +168,7 @@ Blockers:
 
 - **Spawn when:** personal inputs captured AND #8 AND #9 complete
 - **Agent type:** `general-purpose`
+- **Branch:** `report-v1`
 - **Output:** `report.md` (the one artifact)
 - **Status:** SKELETON — prompt to be written when scenario outputs exist
 
