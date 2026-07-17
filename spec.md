@@ -76,9 +76,11 @@ Every value in the engine carries at minimum:
 - `source` — where the value came from
 - `as_of_date` — when it was pulled/verified
 
+**Dataset-citation pattern**: for values sourced from published versioned datasets (EIA AEO fuel-price cases, iSeeCars annual depreciation studies, IRS publication editions), `source` may be structured to name the dataset edition explicitly — e.g., `{type: "published_dataset", name: "AEO 2025 reference case", editor: "EIA", edition: "2025"}`. Preserves the citation past URL rot. Idea from #11 (T3CO's vintage-tagged inputs).
+
 Values without evidence are flagged as **assumptions** and enter the assumption log. Sensitivity analysis identifies which assumptions are load-bearing.
 
-Full schema (confidence tiers, sensitivity machinery) — pending task #4.
+Full schema (confidence tiers, sensitivity machinery, dataset-citation formalization) — pending task #4.
 
 ## Risk modeling approach
 
@@ -90,7 +92,9 @@ Scenarios that carry structural risk (used-modded builds, used-4xe fire recall e
 
 **Rejected: weighted composite risk scores.** False precision.
 
-Formal design (data sources, probability calibration, math specifics, report presentation) is delegated to task #12 (currently scoped to used-4xe risk).
+**Anti-double-count rule** (from #12): resale/exit-value and risk line items can both express "the asset is a liability." Each dollar belongs to exactly one. Rule: *the exit-value term captures what the market prices in; risk line items capture only owner-borne out-of-pocket events.* Depreciation that depresses resale is an exit-value effect, not a repair line.
+
+Formal design for the used-4xe risk model is complete (`4xe-risk/proposal.md`, workstream #12). Framework generalization for other risk-carrying scenarios pending.
 
 ## Design principles
 
@@ -99,6 +103,7 @@ Formal design (data sources, probability calibration, math specifics, report pre
 - **Extensibility.** Assume we haven't identified every variable. New variable classes must bolt on without rework.
 - **Session separation.** Strategic decisions live at the strategic hub. Tactical work runs in delegated sub-contexts with bounded scope.
 - **No false precision.** Where a value can be honestly monetized, do so. Where it can't, flag qualitatively — don't pretend.
+- **Community-anchored calibration.** Sub-models with well-established community answers (e.g., "Sport + mods vs Rubicon" for the mod-adjusted cost function) must reproduce those answers at their own inputs. Reality-check on math independent of engine abstractions. Idea from #11.
 
 ## Findings shaping the engine (discovery pass, 2026-07-15)
 
@@ -109,6 +114,8 @@ Five findings that changed the taxonomy and scenario space:
 3. **MY2026 = last-of-V6/manual before MY2027 facelift + Hurricane I6 re-power.** Discrete timing scenario — not a "wait a month" question but a "buy this end-of-run vs wait for refreshed pricier next-gen" question.
 4. **Recall/defect risk register is a first-class variable class.** Active in 2026: 4xe HV battery fire recall (~228k units, active class action, park-outside guidance), death wobble on 2024–25 stock units, UConnect 5 OTA failures, TPMS recall (~79k units), Sky One-Touch top leaks. Config-conditional risk flags with real TCO and resale consequences.
 5. **Powertrain is a cross-cutting central fork.** 3.6 V6 · 2.0T · 4xe carry structurally different reliability, fuel, resale, warranty (4xe HV 8yr/100k), and (formerly) tax profiles. Not a single MSRP delta — the engine reasons across these dimensions.
+6. **Prior art doesn't displace the engine (workstream #11).** Four independent research passes converged: consumer data products price one config; execution services negotiate one deal; the decision layer between them — heterogeneous scenario ranking — has no occupant at any price point. Verdict: build. Detail: `prior-art/report.md`.
+7. **Used-4xe risk penalty is horizon-dependent (workstream #12).** The HV battery warranty clock (8yr/100k) is the master variable. A 2023 4xe bought now at ~20k mi has ~5yr/80k mi of coverage remaining; time binds before mileage. Consequence: at N=3 the monetized battery-replacement line is structurally $0 (Stellantis's bill); at N=5 the exit lands on the warranty cliff; only at N=8 does an owner-borne replacement line become real. Task #1 (horizon lock) is now the largest single determinant of the used-4xe penalty. Detail: `4xe-risk/proposal.md`.
 
 ## Used case — Tier 2 sanity check via Edmunds
 
@@ -135,7 +142,7 @@ Five findings that changed the taxonomy and scenario space:
 
 Unresolved and gating downstream work:
 
-- **Time horizon (task #1)** — N-year window for TCO comparison (3 / 5 / 8yr)
+- **Time horizon (task #1)** — N-year window for TCO comparison (3 / 5 / 8yr). **Now materially load-bearing on the used-4xe scenario** (see finding #7).
 - **Weighting philosophy (task #2)** — how the report renders tradeoffs; primary vs secondary metrics
 - **Provenance framework detail (task #4)** — beyond MVP source + as_of_date
 
@@ -164,8 +171,8 @@ Legend: **✚ added** · **✎ corrected/re-scoped** · (unmarked = validated as
 | 12 | Tax credits | **Federal §30D/§25E/§45W EXPIRED (acquired >2025-09-30, P.L. 119-21)**; state PHEV credits only | ✎ MAJOR re-scope | IRS.gov clean-vehicle page; CO Energy Office/DOR; DOE AFDC | On rule change |
 | 13 | Mod costs | Parts pricing for target build; install labor = shop quote (not public) | ✎ +labor gap | Quadratec, Northridge4x4, ExtremeTerrain; local shop | On build change |
 | 14 | Warranty | Factory terms (3/36, 5/60); 4xe HV battery 8yr/100k; Magnuson-Moss mod interaction | ✎ +MMWA | jeep.com/warranty; FTC (MMWA); Mopar | Once |
-| 15 | Inventory / timing | Stock levels, days-on-lot, MY2026→2027 changeover fork | ✎ +MY-changeover | Jeep inventory; dealer sites; TFL/MoparInsiders | Weekly (decision window) |
-| 16 | Personal | Budget, credit, mileage, use case, trade-in value, home state/county | ✓ | User | Static |
+| 15 | Inventory / timing | Stock levels, days-on-lot, **Market Days Supply (per config; negotiability signal)**, MY2026→2027 changeover fork | ✎ +MDS +MY-changeover | Jeep inventory; dealer sites; CarEdge (MDS); TFL/MoparInsiders | Weekly (decision window) |
+| 16 | Personal | Budget, credit, mileage, use case, trade-in value, home state/county, **home charging capability + duty cycle (gate for used-4xe scenario)** | ✎ +charging | User | Static |
 | 17 | Used market (Tier 2) | TMV, TCO, private-party/dealer values | ✓ | Edmunds; KBB | Monthly |
 | **18** | **✚ Recall / defect risk register** | 4xe fire recall, death wobble, UConnect 5, TPMS, Sky-top leaks — config-conditional risk flags | ✚ NEW | NHTSA API; forums; class-action trackers | On-demand + on recall |
 | **19** | **✚ Powertrain profile** | 3.6 V6 vs 2.0T vs 4xe as cross-cutting dimension | ✚ NEW (cross-cutting) | Composite of #6–14 keyed by engine | Derived |
