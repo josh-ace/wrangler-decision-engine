@@ -6,18 +6,23 @@ formulas, its assertions grow here alongside the smoke test.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from click.testing import CliRunner
 from openpyxl import load_workbook
 
 from engine.analysis import ANALYSIS_MODULES
 from engine.cli import main
-from engine.data import DATA_MODULES, trims
+from engine.data import DATA_MODULES, features, trims
 from engine.workbook import (
     INPUTS_TAB,
     NOTES_TAB,
     REF_LEGEND_TAB,
     REF_PROVENANCE_TAB,
 )
+
+_FEATURES_JSON = Path(__file__).resolve().parents[1] / "data" / "features.json"
 
 # Authoritative expected tab set, derived from the same registries the renderer
 # uses — add a module and this expectation updates itself.
@@ -96,6 +101,39 @@ def test_data_trims_has_real_rows_with_values_and_provenance(tmp_path):
         if r["Trim"] == "Rubicon" and r["Body"] == "JLU 4-door" and r["Powertrain"] == "V6 6MT"
     )
     assert rubicon_4dr["MSRP"] == 49270
+
+
+def test_data_features_has_real_taxonomy_rows(tmp_path):
+    runner = CliRunner()
+    out = tmp_path / "wrangler.xlsx"
+    assert runner.invoke(main, ["render", "-o", str(out)]).exit_code == 0
+
+    taxonomy = json.loads(_FEATURES_JSON.read_text(encoding="utf-8"))
+
+    wb = load_workbook(out)
+    ws = wb[features.TAB_NAME]
+    rows = _read_table_rows(ws, features.COLUMNS)
+
+    # Row count matches the taxonomy exactly.
+    assert len(rows) == len(taxonomy["features"])
+
+    # Feature ids (slugs) are all unique — no duplicate features in the taxonomy.
+    ids = [f["id"] for f in taxonomy["features"]]
+    assert len(ids) == len(set(ids))
+
+    # Every rendered row carries curator-attributed provenance and null prices.
+    for row in rows:
+        assert "curator" in row["Source"]
+        assert row["As_Of_Date"] == "2026-07-18"
+        assert row["Factory_Option_Price"] is None
+        assert row["Aftermarket_Price"] is None
+
+    by_feature = {row["Feature"]: row for row in rows}
+
+    # Spot-check known off-road features and their standard-on availability.
+    assert "Rubicon" in by_feature["Rear Locker"]["Standard_On"]
+    rock_rails = by_feature["Rock Rails"]["Standard_On"]
+    assert "Willys" in rock_rails and "Rubicon" in rock_rails
 
 
 def test_refresh_preserves_user_edits(tmp_path):

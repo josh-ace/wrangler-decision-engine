@@ -1,0 +1,297 @@
+{
+  "schema_version": "1.0",
+  "title": "2026 Jeep Wrangler — Feature Taxonomy (curated)",
+  "provenance": {
+    "source": "order_guide_2026 + curator",
+    "as_of_date": "2026-07-18"
+  },
+  "provenance_note": "Feature identity, trim standard-vs-option status, and option codes/prices are read from config/order_guide.json (order_guide_2026, reissued 2025-08-06). The SELECTION of which features to include, the category assignment, and any equipment not line-itemed on the guide's non-exhaustive content pages (skid plates, crawl control) are curator judgment — hence the '+ curator' source. Where the guide's Rubicon/Sahara 'content' page conflicts with a separately-priced option (steel bumpers = option AD3), the taxonomy follows the priced option and notes the reconciliation. Community mod-target framing draws on discovery/report.md §3.2.",
+  "categories": [
+    "drivetrain",
+    "suspension",
+    "wheels_tires",
+    "body_armor",
+    "electrical_lighting",
+    "top_and_doors",
+    "interior_tech",
+    "safety_adas",
+    "towing"
+  ],
+  "trims": [
+    "Sport",
+    "Sport S",
+    "Willys",
+    "Sahara",
+    "Rubicon",
+    "Rubicon X"
+  ],
+  "trims_note": "Canonical trim names valid in every feature's standard_on. These match the trim names in Data_Trims (config/order_guide.json) except the fleet-only right-hand-drive Sport RHD, which is excluded from the taxonomy. Body style (JL 2-door vs JLU 4-door) is NOT a distinguishing dimension for any standard feature below — the off-road hardware is identical across bodies for a given trim — so plain trim names are used; body-specific facts (Sahara is 4-door only; Xtreme 35 content differs by body) live in per-feature notes.",
+  "features": [
+    {
+      "id": "rear_locker",
+      "name": "Rear Locker",
+      "category": "drivetrain",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Electronic locking rear differential (Tru-Lok). Willys via DSH E-Locker Rear Axle; Rubicon pairs it with a front locker. Not factory-optionable on Sport / Sport S / Sahara — a common regear+locker aftermarket target for those trims."
+    },
+    {
+      "id": "front_locker",
+      "name": "Front Locker",
+      "category": "drivetrain",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Electronic locking front differential (Tru-Lok), paired with the rear on Rubicon. Not offered on any other trim from the factory."
+    },
+    {
+      "id": "rock_trac_transfer_case",
+      "name": "Rock-Trac 4:1 Transfer Case",
+      "category": "drivetrain",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Heavy-duty part-time 2-speed transfer case with a 4:1 low-range crawl ratio. Rubicon-exclusive; the single biggest crawl-ratio differentiator versus the 2.72:1 Command-Trac on Sport/Willys."
+    },
+    {
+      "id": "selec_trac_transfer_case",
+      "name": "Selec-Trac Full-Time 2-Speed Transfer Case",
+      "category": "drivetrain",
+      "standard_on": ["Sahara"],
+      "notes": "Full-time 4WD transfer case, usable on dry pavement, unique to Sahara (which is 4-door only). Sport / Sport S / Willys use part-time Command-Trac; Rubicon uses Rock-Trac."
+    },
+    {
+      "id": "command_trac_transfer_case",
+      "name": "Command-Trac Part-Time Transfer Case (2.72:1)",
+      "category": "drivetrain",
+      "standard_on": ["Sport", "Sport S", "Willys"],
+      "notes": "Base part-time 2-speed transfer case, 2.72:1 low range. The reference point the Rubicon (4:1 Rock-Trac) and Sahara (full-time Selec-Trac) improve on."
+    },
+    {
+      "id": "axle_ratio_410",
+      "name": "4.10 Axle Ratio",
+      "category": "drivetrain",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Numerically higher (4.10) gearing for crawl and larger-tire drivability. Willys via DMF; standard on Rubicon. Sport / Sport S ship taller highway gears; a 4.10/4.56/4.88 regear is a common mod when fitting 35s. The factory 4.88 (DMS) is manual-only on Rubicon."
+    },
+    {
+      "id": "heavy_duty_axles",
+      "name": "Heavy-Duty Wide Axles (Dana M210/M220)",
+      "category": "drivetrain",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Wide-track heavy-duty front (Dana M210) and rear (Dana M220) axles. Willys and Rubicon share the wide axles; Rubicon adds heavier diffs and, with the factory 35s package, a full-floating rear (2-door). Sport / Sport S / Sahara use lighter axles."
+    },
+    {
+      "id": "off_road_plus_mode",
+      "name": "Off-Road+ Drive Mode",
+      "category": "drivetrain",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Off-Road+ (XG7) throttle and traction tuning for sand and rock. Standard on Willys and Rubicon."
+    },
+    {
+      "id": "crawl_control",
+      "name": "Selec-Speed Crawl Control",
+      "category": "drivetrain",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Low-speed off-road crawl control (hill-ascent/descent). Standard Rubicon equipment; not line-itemed on the guide's content page, so curator-sourced from Jeep trim spec."
+    },
+    {
+      "id": "sway_bar_disconnect",
+      "name": "Electronic Front Sway Bar Disconnect",
+      "category": "suspension",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Electronically disconnecting front sway bar for wheel articulation. Rubicon-only from the factory and not optionable elsewhere — one of the most common aftermarket adds (manual or electronic) on Sport / Willys / Sahara builds."
+    },
+    {
+      "id": "willys_suspension",
+      "name": "Willys Off-Road Suspension",
+      "category": "suspension",
+      "standard_on": ["Willys"],
+      "notes": "Willys-specific tuned suspension (SDV) with a mild lift over Sport. Not a full Rubicon-height setup."
+    },
+    {
+      "id": "factory_35_suspension",
+      "name": "35-Inch Tire Suspension (Factory Lift)",
+      "category": "suspension",
+      "standard_on": ["Rubicon X"],
+      "notes": "Factory suspension geometry to clear 35s (SDG). Standard on Rubicon X 2.0T / V6-auto configs (22Y/24Y); available via the Xtreme 35 package (AGB) on Sport S / Willys / Rubicon. Package content differs by body style: the 2-door adds a full-time Rock-Trac + full-floating M220 rear + 5,650 lb GVWR; the 4-door adds performance brakes + a 6,250 lb GVWR (see order_guide_notes.md §4). Ambiguity: the guide labels only AGB “Xtreme 35”; the community “Xtreme Recon” 35 package maps to this entry."
+    },
+    {
+      "id": "tires_33",
+      "name": "33-Inch Mud-Terrain Tires",
+      "category": "wheels_tires",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Roughly 33-inch (LT285/70R17) mud-terrain tires standard. Sport / Sport S run ~32-inch all-terrains; Sahara ~32-inch."
+    },
+    {
+      "id": "tires_35_factory",
+      "name": "35-Inch Tires (Factory)",
+      "category": "wheels_tires",
+      "standard_on": ["Rubicon X"],
+      "notes": "Factory 35-inch tires. Standard on Rubicon X 2.0T / V6-auto (22Y/24Y); optional via the Xtreme 35 package (AGB, $4,895 MSRP) on Sport S / Willys / Rubicon, which requires the 8-speed automatic (EC1/DFT). A frequent aftermarket target that usually forces a regear."
+    },
+    {
+      "id": "off_road_wheels_17",
+      "name": "17-Inch Off-Road Wheels",
+      "category": "wheels_tires",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "17-inch wheels sized for tall off-road tires (builders favor 17s for tire-sidewall options and beadlock fitment). Included with these trims' off-road tire packages."
+    },
+    {
+      "id": "rock_rails",
+      "name": "Rock Rails",
+      "category": "body_armor",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Rock-protection sill rails guarding the rockers. Willys via MEF Rock Protection Sill Rails; standard Rubicon equipment. A common bolt-on for Sport / Sport S / Sahara (the Mopar HD Rock Slider, MMU, is a factory accessory across trims)."
+    },
+    {
+      "id": "steel_bumpers",
+      "name": "Steel Front & Rear Bumpers",
+      "category": "body_armor",
+      "standard_on": [],
+      "notes": "Steel front and rear bumpers (MC6/MD6). Standard on no trim: a factory option on Rubicon via the Steel Bumper Group (AD3, $1,495 MSRP). The guide's Rubicon/Sahara content pages highlight the steel bumpers, but AD3 is separately priced, so the taxonomy treats them as a factory option, not standard equipment (curator reconciliation). A very common aftermarket swap across all trims."
+    },
+    {
+      "id": "winch",
+      "name": "Factory Warn Winch",
+      "category": "body_armor",
+      "standard_on": [],
+      "notes": "Factory-installed Warn winch (XE5, $1,995 MSRP on Rubicon). Requires a steel front bumper (AD3/MC6) and is offered only on Rubicon. Standard on no trim — an option or a common aftermarket recovery add."
+    },
+    {
+      "id": "skid_plates",
+      "name": "Underbody Skid Plates",
+      "category": "body_armor",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Transfer-case and fuel-tank skid plates. Standard Rubicon equipment; not line-itemed on the guide's content page, so curator-sourced from Jeep trim spec. Willys carries partial underbody protection; Sport / Sport S / Sahara are common skid-plate add candidates."
+    },
+    {
+      "id": "highline_fenders",
+      "name": "High-Clearance (Highline) Fender Flares",
+      "category": "body_armor",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "High-clearance Rubicon Highline flares for larger-tire clearance. Willys and the base Rubicon use MIC (textured black) highline flares (MMZ); Rubicon can upgrade to body-color (MHV). Aids clearance when running 35s."
+    },
+    {
+      "id": "led_headlamps",
+      "name": "LED Premium Headlamps",
+      "category": "electrical_lighting",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "LED premium reflector headlamps (LPX). Standard on Willys / Rubicon; a $1,695 option (ADA, LED Headlamp & Fog Lamp Group) on Sport S. Base Sport ships with halogens. A frequent early upgrade."
+    },
+    {
+      "id": "led_fog_lamps",
+      "name": "LED Fog Lamps",
+      "category": "electrical_lighting",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Front LED fog lamps (LNV). Bundled with the LED headlamps on Willys / Rubicon; optional (ADA) on Sport S."
+    },
+    {
+      "id": "led_taillamps",
+      "name": "LED Taillamps",
+      "category": "electrical_lighting",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "LED taillamps (LAY). Standard on Rubicon; available on Sport S / Willys / Sahara through the Safety Group (AJ1)."
+    },
+    {
+      "id": "aux_switches",
+      "name": "Auxiliary Switches (Factory Upfit Wiring)",
+      "category": "electrical_lighting",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Dash auxiliary switches (LH2) for wiring lights, a winch, or accessories. Standard on Willys / Rubicon; optional via the Trailer Tow & Aux Switch Group (ADH) on Sport / Sport S / Sahara. Valued by builders for clean accessory wiring."
+    },
+    {
+      "id": "hard_top",
+      "name": "3-Piece Freedom Hard Top",
+      "category": "top_and_doors",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Body-color 3-piece Freedom hard top (HT3) standard on Rubicon / Rubicon X. Sport / Sport S / Willys / Sahara ship with a soft top; a black or body-color hard top is a $1,895–$2,195 factory option (HT1/HT3)."
+    },
+    {
+      "id": "soft_top",
+      "name": "Sunrider Soft Top",
+      "category": "top_and_doors",
+      "standard_on": ["Sport", "Sport S", "Willys", "Sahara"],
+      "notes": "Standard folding soft top on the non-Rubicon trims. Baseline for the top-choice axis; the Dual Top and Sky One-Touch options replace or supplement it."
+    },
+    {
+      "id": "dual_top",
+      "name": "Dual Top Group (Hard + Soft)",
+      "category": "top_and_doors",
+      "standard_on": [],
+      "notes": "Factory both-tops option (AEN, $2,495 MSRP): a hard top plus a premium Sunrider soft top. Standard on no trim; mutually exclusive with the Sky One-Touch power top."
+    },
+    {
+      "id": "sky_one_touch",
+      "name": "Sky One-Touch Power Top",
+      "category": "top_and_doors",
+      "standard_on": [],
+      "notes": "Power canvas roof (STJ, $3,995 MSRP) available on Sport S and up (not base Sport). Standard on no trim. Community risk flag: front-corner / door-gap leaks and hydraulic/electronic stalls are a recurring complaint (discovery/report.md §3.2)."
+    },
+    {
+      "id": "uconnect5_nav",
+      "name": "Uconnect 5 Navigation w/ 12.3\" Display",
+      "category": "interior_tech",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "12.3-inch Uconnect 5 with navigation (UBX). Standard on Rubicon / Rubicon X; available on lower trims via the Technology Group (AJY). UConnect 5 is a community reliability watch-item (black-screen / OTA issues, §3.2)."
+    },
+    {
+      "id": "alpine_audio",
+      "name": "Alpine Premium Audio",
+      "category": "interior_tech",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Alpine premium speakers and subwoofer (RC4). Standard on Rubicon / Rubicon X and bundled in the Sahara Popular Equipment Group (AYY); a $1,595 option on Sport S / Willys."
+    },
+    {
+      "id": "off_road_camera",
+      "name": "Integrated Off-Road Camera",
+      "category": "interior_tech",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Forward-facing trail camera with washer (XNY). Standard on Rubicon / Rubicon X; part of the Technology Group (AJY) elsewhere."
+    },
+    {
+      "id": "heated_seats_wheel",
+      "name": "Heated Front Seats & Steering Wheel",
+      "category": "interior_tech",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Heated front seats (JPM) and heated steering wheel (NHS). Standard on Rubicon / Rubicon X; bundled in the Convenience Group (AJK) on Sport S / Willys and the Popular Equipment Group (AYY) on Sahara."
+    },
+    {
+      "id": "leather_seats",
+      "name": "Nappa Leather Seats",
+      "category": "interior_tech",
+      "standard_on": ["Rubicon X"],
+      "notes": "Nappa leather (VL) standard at no charge on Rubicon X; a $1,995 option on Rubicon (also adds an 8-way power driver seat). Cloth is standard from Sport through Willys."
+    },
+    {
+      "id": "blind_spot",
+      "name": "Blind Spot & Cross-Path Detection",
+      "category": "safety_adas",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Blind-spot monitoring (XAN). Standard on Rubicon / Rubicon X; available via the Safety Group (AJ1) on Sport S / Willys / Sahara."
+    },
+    {
+      "id": "adaptive_cruise",
+      "name": "Enhanced Adaptive Cruise Control",
+      "category": "safety_adas",
+      "standard_on": ["Sport S", "Willys", "Rubicon", "Rubicon X"],
+      "notes": "Adaptive cruise with stop (NH1). Standard from Sport S up (present in Sport S and Willys package content; standard on Rubicon). Base Sport only lacks it. Sahara's base content is not line-itemed on the guide but bundles Sport-S-level ADAS via the Popular Equipment Group (AYY) — curator note."
+    },
+    {
+      "id": "forward_collision_warning",
+      "name": "Full-Speed Forward Collision Warning Plus",
+      "category": "safety_adas",
+      "standard_on": ["Sport S", "Willys", "Rubicon", "Rubicon X"],
+      "notes": "Forward collision warning with active braking (LSU). Standard from Sport S up; base Sport only lacks it."
+    },
+    {
+      "id": "park_assist",
+      "name": "ParkSense Rear Park Assist",
+      "category": "safety_adas",
+      "standard_on": ["Rubicon", "Rubicon X"],
+      "notes": "Rear parking sensors (XAA). Standard on Rubicon / Rubicon X; via the Safety Group (AJ1) on Sport S / Willys / Sahara."
+    },
+    {
+      "id": "trailer_tow_prep",
+      "name": "Trailer Tow & Hitch Prep",
+      "category": "towing",
+      "standard_on": ["Willys", "Rubicon", "Rubicon X"],
+      "notes": "Class II receiver hitch, 4-/7-pin wiring, and aux switches (XF2/XFN/LH2, or the AHC Trailer Tow Prep Package on Rubicon). Standard on Willys / Rubicon; a factory option (ADH) on Sport / Sport S / Sahara."
+    }
+  ]
+}
