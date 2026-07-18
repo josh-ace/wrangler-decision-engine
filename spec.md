@@ -2,18 +2,18 @@
 
 ## Goal
 
-Make the best 2026 Jeep Wrangler purchase decision, defensibly, using a system that can be re-run as market conditions change — not a folder of research that goes stale.
+Make the true cost structure of a 2026 Jeep Wrangler purchase visible, so the answer becomes intuitive without needing years of experience to read pricing sheets. The tool decomposes the decision into layers, sizes each price-affecting lever in dollars, and exposes the value structure at every level. Not a ranking, not a recommendation — a decomposition that lets the user see the answer.
 
 ## Two artifacts
 
-1. **Engine** — reproducible model. Inputs + calculations + assumption log + provenance + sensitivity analysis. Editable, versioned.
-2. **Report** — the one artifact the user acts on. Ranks scenarios, names a recommendation, exposes the reasoning, flags what would flip the ranking.
+1. **Engine** — reproducible model. Ingests config data + personal inputs + market-dynamic data. Runs the same math per decision layer per candidate path. Provenance-tracked, editable, versioned.
+2. **Report** — the one artifact the user reads. Decomposes the decision layer by layer, sizes each lever in dollars, exposes the value structure per layer. No ranking, no composite score — transparency.
 
 The report is the deliverable. The engine is what makes the report defensible and re-runnable.
 
-## Multi-axis scenario framework
+## Multi-axis decision framework
 
-Each scenario is a full stack across five axes:
+The decision spans five price-affecting axes. Each is a decision layer with its own transparency section in the report:
 
 1. **Vehicle condition** — new custom order · new dealer stock · CPO · used private · used dealer
 2. **Trim + config** — Sport, Sport S, Willys, Sahara (4dr only), Rubicon, Rubicon X · 2dr vs 4dr · powertrain (V6 6MT · V6 8AT 4dr-only · 2.0T 8AT; **4xe used-only**)
@@ -24,51 +24,126 @@ Each scenario is a full stack across five axes:
 **Scope exclusions:**
 - **392 (V8 top-of-line)** — out entirely
 - **New 4xe** — not in 2026 US order guides; user does not intend to buy new
-- **4xe is in-scope only as a used-market scenario** (see Tier 2)
+- **4xe is in-scope only as a used-market scenario** (see Used case)
 
 **Legal combinations tracked:** Not every combination is valid. Engine enforces combination constraints (e.g., out-of-state + lease often blocked; manual only with V6; §30D federal credit no longer applies to any scenario — see finding #1).
 
-## TCO framework
+## Cost decomposition framework
 
-All scenarios resolve through the same equation:
+The engine's underlying math resolves the total cost of any path (target build × trim × sourcing × financing × timing × condition) over horizon N as:
 
 ```
-Total cost to own target build for N years =
-    acquisition
+Total cost to reach target build over N years =
+    acquisition (trim + config + destination + fees)
   + mods needed to reach target build
   + operating (fuel + insurance + maintenance + tax/reg)
   − exit value at N
-  + risk-adjusted expected costs   (see "Risk modeling")
+  + risk-adjusted expected costs
 ```
 
-- **New scenarios** = specification (build this, buy this way)
+The math is the same as a TCO calculation. What differs is the *output*: the engine doesn't compute a single N-year TCO number per scenario and rank scenarios by it. It decomposes each *decision layer* — trim path, sourcing, financing, timing, ongoing costs — and shows the dollar delta each layer moves. The user sees how each layer contributes to total cost per path, not just a ranked list of scenario totals.
+
+- **New scenarios** = specification (build this config, buy this way)
 - **Used scenarios** = listing (this specific unit, priced today)
 
-Both populate the same equation with different data schemas.
+Both flow through the same equation with different input schemas.
 
 ## Report shape
 
-**Scorecard of scenario profiles**, not a single composite. Rows are scenarios; columns are metrics.
+Organized by **decision layer**, not by scenario. Each layer is a transparency section showing dollar movement and mechanism.
 
-**Financial metrics per scenario:**
-- N-year total cost of ownership
-- Monthly cash flow
-- Upfront cash required
-- Exit value at horizon
-- Cost per mile
-- Delta vs cheapest scenario
+### 1. Target build (the invariant)
 
-**Non-financial metrics per scenario:**
-- Time to acquire
-- Warranty coverage at horizon
-- Exit flexibility
-- Configuration precision
-- **Risk exposure** — qualitative flags from Risk modeling
-- Mod install effort remaining
+Your capability targets — 35s, rear locker, rock rails, ~2" lift, winch, steel bumper, etc. Capability outcomes, not measurements, not a shopping list. Every path has to reach these.
 
-**Applicability is per-scenario**: some metrics are N/A for certain scenarios (e.g., "exit at 36 months" applies to lease only). N/A ≠ zero — matters for any composite score.
+### 2. Biggest levers for you
 
-Optional composite score renders as secondary view under user-provided weighting. Primary view is the raw profile scorecard.
+A dollar-sized summary of which decision layers move the price most for your specific target build and personal inputs:
+
+```
+Trim path:      up to ±$8,200
+Sourcing:       up to ±$2,800
+Financing:      up to ±$1,900 (current incentive window)
+Timing:         up to ±$1,500 (MY26 end-of-run vs wait)
+Trade-in:       up to ±$1,200 (private vs dealer credit)
+```
+
+Tells the user where the money actually is and where to focus attention. Prioritization as a first-class output.
+
+### 3. Per-layer transparency sections
+
+For each price-affecting axis, a decomposition section. Pattern varies but the shape is *transparency*, not ranking.
+
+**Trim path** — three-price breakdown per feature-delta:
+
+| Feature | Standard-embedded | Factory option | Aftermarket |
+|---|---|---|---|
+| Rear locker | Rubicon-included | not optionable on Sport/S/Willys | $X installed |
+| Rock rails | Willys, Rubicon | $Y on Sport/S | $Z aftermarket |
+| Sway disconnect | Rubicon | not optionable elsewhere | $W aftermarket |
+| ... | ... | ... | ... |
+
+Plus landed-cost comparison for target build across trim paths (Sport + factory + mods vs Willys + fewer mods vs Rubicon at-target).
+
+**Sourcing** — actual price for the chosen config across channels:
+
+| Channel | Price for target config | Delta vs local | Notes |
+|---|---|---|---|
+| Local dealer (est. 4% off invoice) | $X | — | — |
+| Mark Dodge (~7% off invoice) | $Y | −$D | +price protection, 10–16wk lead |
+| CPO 2023 Rubicon similar spec | $Z | −$D' | used-path alternative |
+
+**Financing** — three-way with mechanism visible:
+
+```
+Cash               Finance (given incentive)   Lease
+─────              ──────────────────────      ─────
+$X upfront         $Y/mo × N months            $Z/mo × M months
+Keep the car       Keep the car                Walk at exit
+Opp cost of tied   Interest paid over term     Effective monthly
+cash at your HYSA  Effective vs cash: ±$D      + implied buyout math
+rate: $D over N
+```
+
+Shows the mechanism, not just the number. If a 0% finance incentive is on the table, the user *sees* why cash may be more expensive than finance.
+
+**Timing** — current-window incentive delta vs waiting:
+
+```
+Buy this week: incentives = $X; MDS = Y (low → dealer motivated)
+Buy Q4:        expected incentive shift = $Z (based on program history)
+Wait MY27:     refresh + Hurricane I6 (~$? premium; V6/manual gone)
+```
+
+**Ongoing costs (horizon N)** — decomposed by category, per path where they differ:
+
+| Category | Sport-mods path | Willys-mods path | Rubicon path | Used-CPO path |
+|---|---|---|---|---|
+| Fuel over N yr | ... | ... | ... | ... |
+| Insurance | ... | ... | ... | ... |
+| Maintenance | ... | ... | ... | ... |
+| Property tax | ... | ... | ... | ... |
+| Exit value | ... | ... | ... | ... |
+
+**Risk flags** — shown next to the dollars they affect, not rolled into a composite score:
+
+- 4xe fire recall (2023 in scope): park-outside guidance applicable? Check VIN status.
+- Death wobble on 2024–25 stock: qualitative flag on those units.
+- UConnect 5 OTA failures: qualitative reliability drag; awaiting Q1 2026 fix.
+
+### 4. Sensitivity — what would change the picture
+
+What input movements would flip which layer's answer. Example:
+
+- If HYSA drops to 1%: cash-vs-finance advantage collapses; sign may flip
+- If Mark Dodge lead exceeds 12wk: opportunity cost of the wait eats half the sourcing savings
+- If fuel jumps 15%: 2.0T path saves $X vs V6 over 5yr, previously $0 difference
+
+User sees where their answer is stable and where it's fragile.
+
+### 5. Provenance summary
+
+Count of values by source, oldest `as_of_date`, list of assumptions currently unbacked by data. Trust surface.
 
 ## Provenance framework (MVP)
 
@@ -86,11 +161,11 @@ Full schema (confidence tiers, sensitivity machinery, dataset-citation formaliza
 
 Scenarios that carry structural risk (used-modded builds, used-4xe fire recall exposure and class action drift, battery health uncertainty, program-dependent incentives) apply a **three-layer treatment**:
 
-1. **Quantified TCO line items** for risks that can be honestly monetized — expected cost = probability × impact. Examples: HV battery replacement expected value, extended warranty premium for hedge, loss-of-garage-parking cost during park-outside advisories.
-2. **Confidence-interval widening** — scenarios with high stochastic risk exposure show a *range* rather than a point estimate. Same mechanism as used-modded scenarios.
-3. **Qualitative risk-score column** — for risks that refuse to monetize honestly (fire recall status, class action outcomes, safety perception), a discrete risk column in the scorecard. Doesn't rig the TCO number; shows up alongside so the ranking can't ignore it.
+1. **Quantified line items** where risk can be honestly monetized — expected cost = probability × impact. These appear in the ongoing-costs decomposition section for the affected path. Examples: HV battery replacement expected value (N=8 only per finding #7), extended warranty premium for hedge, loss-of-garage-parking cost during park-outside advisories.
+2. **Confidence-interval widening** for stochastic tail risk — affected paths show a *range* per line item rather than point estimates.
+3. **Qualitative risk flags** shown next to the layer they affect — NOT rolled into any composite. If a used-4xe carries a fire recall flag, the flag appears next to the used-4xe sourcing/pricing line so the user sees it in context.
 
-**Rejected: weighted composite risk scores.** False precision.
+**Rejected: weighted composite risk scores.** False precision. Redundant given no scoring at all under the transparency framing.
 
 **Anti-double-count rule** (from #12): resale/exit-value and risk line items can both express "the asset is a liability." Each dollar belongs to exactly one. Rule: *the exit-value term captures what the market prices in; risk line items capture only owner-borne out-of-pocket events.* Depreciation that depresses resale is an exit-value effect, not a repair line.
 
@@ -98,6 +173,7 @@ Formal design for the used-4xe risk model is complete (`4xe-risk/proposal.md`, w
 
 ## Design principles
 
+- **Transparency over recommendation.** The tool reveals value structure; the user picks. No ranked winner, no composite score. Every dollar decomposed by layer so the answer becomes visible without trusting a black box.
 - **MVP over exhaustive.** Build the minimum viable version, iterate. Perfect enumeration and rigor gate nothing important.
 - **Graduated inclusion.** Build the cheapest version of each axis that can answer the strategic question. Escalate depth only where the cheap version says it matters.
 - **Extensibility.** Assume we haven't identified every variable. New variable classes must bolt on without rework.
@@ -105,51 +181,45 @@ Formal design for the used-4xe risk model is complete (`4xe-risk/proposal.md`, w
 - **No false precision.** Where a value can be honestly monetized, do so. Where it can't, flag qualitatively — don't pretend.
 - **Community-anchored calibration.** Sub-models with well-established community answers (e.g., "Sport + mods vs Rubicon" for the mod-adjusted cost function) must reproduce those answers at their own inputs. Reality-check on math independent of engine abstractions. Idea from #11.
 
-## Findings shaping the engine (discovery pass, 2026-07-15)
-
-Five findings that changed the taxonomy and scenario space:
+## Findings shaping the engine
 
 1. **Federal EV credits (§30D new · §25E used · §45W commercial/lease-passthrough) are dead** — terminated by the One, Big, Beautiful Bill Act (P.L. 119-21) for vehicles acquired after 2025-09-30. Verified at IRS.gov. Any current "$7,500 on a 4xe lease" is manufacturer/dealer cash, NOT a federal credit — model as short-lived program incentive.
-2. **National-delivery discount dealers get quantified.** Mark Dodge (LA), Granger (IA) publicly quote ~7% below invoice with price protection, ~10–16 wk lead time. First-class sourcing scenario with measurable delta vs local dealer.
-3. **MY2026 = last-of-V6/manual before MY2027 facelift + Hurricane I6 re-power.** Discrete timing scenario — not a "wait a month" question but a "buy this end-of-run vs wait for refreshed pricier next-gen" question.
-4. **Recall/defect risk register is a first-class variable class.** Active in 2026: 4xe HV battery fire recall (~228k units, active class action, park-outside guidance), death wobble on 2024–25 stock units, UConnect 5 OTA failures, TPMS recall (~79k units), Sky One-Touch top leaks. Config-conditional risk flags with real TCO and resale consequences.
-5. **Powertrain is a cross-cutting central fork.** 3.6 V6 · 2.0T · 4xe carry structurally different reliability, fuel, resale, warranty (4xe HV 8yr/100k), and (formerly) tax profiles. Not a single MSRP delta — the engine reasons across these dimensions.
-6. **Prior art doesn't displace the engine (workstream #11).** Four independent research passes converged: consumer data products price one config; execution services negotiate one deal; the decision layer between them — heterogeneous scenario ranking — has no occupant at any price point. Verdict: build. Detail: `prior-art/report.md`.
-7. **Used-4xe risk penalty is horizon-dependent (workstream #12).** The HV battery warranty clock (8yr/100k) is the master variable. A 2023 4xe bought now at ~20k mi has ~5yr/80k mi of coverage remaining; time binds before mileage. Consequence: at N=3 the monetized battery-replacement line is structurally $0 (Stellantis's bill); at N=5 the exit lands on the warranty cliff; only at N=8 does an owner-borne replacement line become real. Task #1 (horizon lock) is now the largest single determinant of the used-4xe penalty. Detail: `4xe-risk/proposal.md`.
+2. **National-delivery discount dealers get quantified.** Mark Dodge (LA), Granger (IA) publicly quote ~7% below invoice with price protection, ~10–16 wk lead time. First-class sourcing layer with measurable delta vs local dealer.
+3. **MY2026 = last-of-V6/manual before MY2027 facelift + Hurricane I6 re-power.** Discrete timing layer entry — not a "wait a month" question but "buy this end-of-run vs wait for refreshed pricier next-gen."
+4. **Recall/defect risk register is a first-class variable class.** Active in 2026: 4xe HV battery fire recall (~228k units, active class action, park-outside guidance), death wobble on 2024–25 stock units, UConnect 5 OTA failures, TPMS recall (~79k units), Sky One-Touch top leaks. Config-conditional risk flags with real dollar consequences on affected layers.
+5. **Powertrain is a cross-cutting central fork.** 3.6 V6 · 2.0T · 4xe carry structurally different reliability, fuel, resale, warranty (4xe HV 8yr/100k), and (formerly) tax profiles. Reasoned across dimensions in the trim/config layer.
+6. **Prior art doesn't displace the engine (workstream #11).** Four independent research passes converged: consumer data products price one config; execution services negotiate one deal; the decision layer between them — decomposition transparency — has no occupant at any price point. Verdict: build. Detail: `prior-art/report.md`.
+7. **Used-4xe risk penalty is horizon-dependent (workstream #12).** The HV battery warranty clock (8yr/100k) is the master variable. A 2023 4xe bought now at ~20k mi has ~5yr/80k mi of coverage remaining; time binds before mileage. At N=3 the monetized battery-replacement line is structurally $0 (Stellantis's bill); at N=5 the exit lands on the warranty cliff; only at N=8 does an owner-borne replacement line become real. Task #1 (horizon lock) is now the largest single determinant of the used-4xe cost profile. Detail: `4xe-risk/proposal.md`.
+8. **Framing shift: transparency system, not recommendation engine (2026-07-17).** Same variables in scope; different output shape. The engine's job is decomposition of the decision into layers with dollar-sized levers, not ranking of scenarios by TCO. User picks; tool reveals. Composite scoring dropped entirely. Weighting philosophy (was open lock #2) is moot. Report structure rewrites to per-decision-layer transparency sections.
 
-## Used case — Tier 2 sanity check via Edmunds
+## Used case
 
-**Scope**: model a small set of canonical used scenarios as engine inputs, not a full listing pipeline.
+Used is an alternative *condition/sourcing path* to the target build, not a separate ranking exercise. In the decomposition report, used appears as entries in the condition/sourcing layer alongside new custom order, new stock, CPO, etc. — each with its own price for the target-build config.
 
-**Data source**: Edmunds
-- **True Market Value** — current transaction-price estimates by config
-- **True Cost to Own (5-yr)** — depreciation, insurance, fuel, maintenance, repairs, financing, taxes broken out
-- **Private-party vs dealer retail** — channel-differentiated used pricing
-- **Ask-a-Dealer forum threads** — monthly MF + residuals for new-side lease math
+**Data source**: Edmunds (True Market Value, True Cost to Own, private-party/dealer values), plus Ask-a-Dealer forum threads for lease MF/residuals on new-side comparisons.
 
-**Canonical used scenarios:**
+**Canonical used entries to price:**
 1. CPO 2023 Rubicon 4dr V6, ~25k mi
 2. CPO 2024 Willys 4dr V6, ~15k mi
-3. **Used 2023 Rubicon 4xe 4dr, ~20k mi** — the *sole* 4xe scenario in the engine (4xe in-scope only via used market; risk-penalized per task #12)
+3. **Used 2023 Rubicon 4xe 4dr, ~20k mi** — sole 4xe entry (4xe in-scope only via used market; risk-flagged per task #12)
 
 **Refresh cadence**: monthly.
 
-**Escalation trigger to Tier 1** (full listing analysis): if any used baseline lands within **$3k or 10% monthly** of best new scenario, escalate. Otherwise, used stays out.
+**Tier 1 escalation** (full listing analysis): if any used entry lands within **$3k or 10% monthly** of best comparable new path in the decomposition, invest in listing-level analysis; otherwise treat as anchor entry only.
 
-**Great-listing manual escape hatch**: if a specific opportunity surfaces mid-decision, evaluate as a one-off using the shared TCO framework. No automation.
+**Great-listing manual escape hatch**: a specific opportunity mid-decision gets evaluated as a one-off through the same cost-decomposition framework.
 
 ## Open strategic locks
 
-Unresolved and gating downstream work:
-
-- **Time horizon (task #1)** — N-year window for TCO comparison (3 / 5 / 8yr). **Now materially load-bearing on the used-4xe scenario** (see finding #7).
-- **Weighting philosophy (task #2)** — how the report renders tradeoffs; primary vs secondary metrics
+- **Time horizon (task #1)** — N-year window over which ongoing costs and exit value are computed (3 / 5 / 8yr). **Materially load-bearing on the used-4xe scenario** (see finding #7). Also load-bearing on financing decomposition (lease term, finance duration, cash opportunity cost).
 - **Provenance framework detail (task #4)** — beyond MVP source + as_of_date
 
 Resolved:
 
-- **4xe scope (task #3)** — in-scope as used-only; new 4xe out; risk-penalized per #12
+- **4xe scope (task #3)** — in-scope as used-only; new 4xe out; risk-flagged per #12
 - **392 scope** — out entirely
+- **Weighting philosophy** (was task #2) — moot after finding #8 framing shift to transparency. No ranking, nothing to weight. Removed.
+- **Report structure** — decomposed by layer per finding #8; no scorecard, no composite
 
 ## Variable taxonomy (refined by discovery pass 2026-07-15)
 

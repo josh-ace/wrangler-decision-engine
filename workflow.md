@@ -275,28 +275,34 @@ Git:
 
 ---
 
-## #8 — Build TCO framework + acquisition sub-models
+## #8 — Build decomposition engine + per-layer sub-models
 
-- **Spawn when:** provenance framework locked AND #6 (config data) complete
+- **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND #1 (horizon) locked AND #7 (personal inputs) captured
 - **Agent type:** `general-purpose`
-- **Branch:** `tco-framework`
+- **Branch:** `decomposition-engine`
 - **Output:** `calc/` directory with sub-models + tests
 - **Status:** SKELETON — prompt to be written when dependencies clear
 
+Scope reshape (per finding #8, 2026-07-17): builds per-decision-layer decomposition, NOT ranked TCO scenarios. Sub-models compute cost impact per axis (trim path + three-price features; sourcing delta; financing math with cash-vs-finance mechanism; timing/incentive; ongoing costs by category; risk-flag placement). Composite scoring rejected.
+
 Blockers:
-- Locked provenance schema
-- Locked time horizon
+- Locked provenance schema (#4)
+- Locked time horizon (#1) — load-bearing on ongoing costs AND used-4xe
 - `config/order_guide.json` from #6
+- Personal inputs from #7 (drives lever prioritization)
+- Aftermarket parts pricing source (for three-price feature transparency)
 
 ---
 
-## #9 — Model Tier 2 canonical used scenarios via Edmunds
+## #9 — Price used entries as sourcing/condition-layer alternatives
 
-- **Spawn when:** #5 (source validation) complete AND #8 (TCO framework) complete AND 4xe scope locked
+- **Spawn when:** #5 (source validation) complete AND #8 (decomposition engine) complete
 - **Agent type:** `general-purpose`
-- **Branch:** `used-baseline`
-- **Output:** `scenarios/used_baseline.md` + `scenarios/index.yaml`
+- **Branch:** `used-entries`
+- **Output:** `scenarios/used_entries.md` + `scenarios/index.yaml`
 - **Status:** SKELETON — prompt to be written when dependencies clear
+
+Scope reshape (per finding #8): used entries are alternative paths in the condition/sourcing layer, not a separate ranking exercise. Prices the 3 canonical used entries via Edmunds and slots them alongside new paths in the layer's transparency section. Tier 1 escalation trigger (within $3k or 10% monthly of best new path) still applies.
 
 Blockers:
 - Sources validated by #5
@@ -305,13 +311,15 @@ Blockers:
 
 ---
 
-## #10 — Generate v1 report + assembly
+## #10 — Generate v1 decomposition report
 
-- **Spawn when:** personal inputs captured AND #8 AND #9 complete
+- **Spawn when:** #7 (personal inputs) captured AND #8 (decomposition engine) AND #9 (used entries) complete
 - **Agent type:** `general-purpose`
 - **Branch:** `report-v1`
 - **Output:** `report.md` (the one artifact)
-- **Status:** SKELETON — prompt to be written when scenario outputs exist
+- **Status:** SKELETON — prompt to be written when decomposition outputs exist
+
+Scope reshape (per finding #8): report is organized by decision LAYER (transparency sections), not by scenario ranking. See spec.md "Report shape" for the five-section structure: (1) target build invariant, (2) biggest levers sized in dollars, (3) per-layer transparency sections with mechanism visible, (4) sensitivity, (5) provenance summary. No composite score, no named winner — decomposition that lets the user see the answer.
 
 Blockers:
 - All sub-models and scenarios modeled
