@@ -429,6 +429,82 @@ Time budget: modest — this is a bounded IC. Should complete in a few hours max
 
 ---
 
+## #16 — IC #2: feature taxonomy + Data_Features real render
+
+- **Spawn when:** any time (IC #15 Data_Trims is merged; independent of IC #17 aftermarket pricing)
+- **Agent type:** `general-purpose`
+- **Branch:** `data-features-real`
+- **Isolation:** `worktree`
+- **Output:** `data/features.json` + real `src/engine/data/features.py` load() + extended E2E assertions; all tests green
+
+**Prompt:**
+
+```
+You are running IC #2 of the vertical-slice sequence. Data_Trims (IC #1) is merged; your job is to produce the feature taxonomy that Data_Features holds and that Analysis_TrimPath will later use for three-price transparency (standard-embedded / factory-option / aftermarket).
+
+Read C:\claude\Wrangler\spec.md sections "Multi-axis decision framework", "Report shape" (especially the "Trim path" three-price example), and "Implementation architecture". Read C:\claude\Wrangler\README.md's "Plug-in pattern for future ICs". Also read the existing implementations for the row-shape contract:
+- src/engine/data/trims.py (reference for the row-shape pattern established in IC #1)
+- src/engine/data/features.py (the stub you're filling in — note the declared COLUMNS)
+- src/engine/xlsx.py (understand the header + provenance mechanics)
+
+Source data: C:\claude\Wrangler\config\order_guide.json (parsed order guide) + supplementary context in C:\claude\Wrangler\config\order_guide_notes.md and C:\claude\Wrangler\discovery\report.md (§3.2 lists the features the community actually argues about).
+
+Goal: produce a curated feature taxonomy — one row per meaningful *feature* — with the availability matrix (which trims have it standard, denormalized), and render it into the Data_Features Excel Table. Aftermarket pricing is IC #17's job — leave Aftermarket_Price null; do NOT scrape or fabricate parts prices.
+
+Deliverables (committed on branch data-features-real):
+
+1. `data/features.json` — the canonical taxonomy
+   - Structure: a JSON object with a `features` array + a `provenance` node (`source`, `as_of_date`) at the top level.
+   - Each feature entry: `id` (stable snake_case slug like `rear_locker`, `electronic_sway_disconnect`, `rock_rails`), `name` (human-readable), `category` (one of a small closed set — you propose: `drivetrain`, `suspension`, `wheels_tires`, `body_armor`, `electrical_lighting`, `top_and_doors`, `interior_tech`, etc.), `standard_on` (list of trim names where this feature comes standard — treat body style as a distinguishing dimension, e.g., "Rubicon (JL 2-door)" vs "Rubicon (JLU 4-door)" when they materially differ), optional `notes` field for anything worth preserving (constraints, powertrain conditionals).
+   - Scope guidance: aim for ~30–60 features that (a) differentiate trims meaningfully AND/OR (b) are common Wrangler-buyer mod targets. Focus on off-road capability (lockers, sway disconnect, transfer case, axles, tire size, skids, rock rails, bumpers, winch, lift), body/top options (Sky One-Touch, hard top, dual top), and material electronics (LED headlamps, UConnect, safety group). Do NOT enumerate every trim-line comfort/appearance item.
+   - Provenance: `{source: "order_guide_2026 + curator", as_of_date: "2026-07-18"}` or similar. Cite the curator step because taxonomy involves judgment.
+
+2. `src/engine/data/features.py` — real render
+   - Update the module docstring to point at data/features.json and describe the taxonomy scope (matches what IC #1 did for trims.py).
+   - Implement load() to read data/features.json and emit one row per feature matching COLUMNS. Provenance is per-row (row-shape contract from IC #1) — read source and as_of_date from the JSON provenance node.
+   - The scaffolding declared: COLUMNS = ["Feature", "Category", "Standard_On", "Factory_Option_Price", "Aftermarket_Price"]. Row emission:
+     - Feature = the `name` field (human-readable)
+     - Category = the `category` field
+     - Standard_On = comma-separated `standard_on` list (informative denorm; the real per-trim availability lives in the taxonomy JSON for later formula work)
+     - Factory_Option_Price = None for IC #2 (per-trim option pricing lives in Data_Options and gets joined in Analysis_TrimPath; this column is a placeholder — you may propose dropping it or renaming to Factory_Option_Available (bool). Justify any schema change in your commit message. If you drop or rename, update the smoke test's expected named ranges if applicable.)
+     - Aftermarket_Price = None for IC #2 (IC #17 fills this in)
+   - Do NOT modify xlsx.py. Do NOT modify other data modules.
+
+3. Extend tests
+   - `tests/test_data_features.py` (new): load() returns > 0 rows; row-shape contract; every feature has an id, name, category from the closed set; every standard_on list references known trim names.
+   - Extend `tests/test_e2e.py` with content assertions: Data_Features row count matches len(features.json.features); spot-check known features (e.g., a "Rear Locker" row exists with Rubicon in Standard_On; a "Rock Rails" row exists with Willys and Rubicon in Standard_On). Include a check that the taxonomy IDs are all unique (no dup slugs).
+
+4. Update README's plug-in pattern section if IC #2 has established a new pattern the future ICs should follow (e.g., "some data modules read curated data/*.json rather than parsed source data — see features.py").
+
+Success criteria (all must be true before commit):
+- pytest passes green (all 56 baseline + any new tests)
+- ruff check passes clean
+- engine render produces a valid .xlsx; Data_Features tab has real rows
+- data/features.json is well-formed, has 30–60 features, unique IDs, categories from a closed set
+- The taxonomy is honestly limited to features that meaningfully differentiate or are common mod targets — no filler
+
+Scope boundaries:
+- Do NOT touch Data_Trims, Data_Options, or other Data_* modules
+- Do NOT fabricate aftermarket prices (IC #17's job)
+- Do NOT design Analysis_TrimPath formulas (IC #18's job)
+- Do NOT add every options-page item; be curatorial
+
+Judgment calls:
+- If a feature is "in a package but not standard alone" (e.g., disconnecting sway bar via Rubicon package), still list it as standard_on that trim; the package equivalence is intentional in the taxonomy.
+- If a feature meaningfully differs by body style (e.g., 4-door-only), split it into two entries or note it in `notes`.
+- Xtreme Recon variants: the guide has different content 2-door vs 4-door — handle as best-fit; note ambiguities in `data/features.json` per-feature notes rather than in a doc.
+
+Git:
+- Work on branch `data-features-real` (create it: `git checkout -b data-features-real`)
+- Commit incrementally with clear messages
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: substantial — this involves both data curation and code. Prioritize a clean, defensible taxonomy over exhaustive feature coverage.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
