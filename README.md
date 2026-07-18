@@ -86,6 +86,16 @@ A *new* data tab: add one module in `src/engine/data/`, then append it to
 `DATA_MODULES` in `src/engine/data/__init__.py`. The renderer, refresh, and the
 E2E expected-tab list all pick it up automatically.
 
+**Two source shapes.** Some data modules parse a raw source directly — `trims.py`
+reads `config/order_guide.json`. Others read a **curated `data/*.json`** artifact
+that can't be derived mechanically from the source. `features.py` (the feature
+taxonomy) is the reference: selecting which features differentiate trims or are mod
+targets, categorizing them, and reconciling the order guide's non-exhaustive content
+pages against its priced options is human judgment, so it lives in version-controlled
+`data/features.json` and the module just renders it. Signal the judgment step in
+provenance — the taxonomy's `source` is `order_guide_2026 + curator`. Prefer this
+pattern whenever a tab's rows require curation rather than a straight parse.
+
 ### To add formulas to an `Analysis_*` tab
 
 1. Edit the module in `src/engine/analysis/` (e.g. `financing.py`). Implement
