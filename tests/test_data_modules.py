@@ -11,6 +11,7 @@ import pytest
 from openpyxl import Workbook
 
 from engine.data import DATA_MODULES
+from engine.xlsx import PROVENANCE_COLUMNS
 
 MODULE_IDS = [m.TAB_NAME for m in DATA_MODULES]
 
@@ -26,9 +27,12 @@ def test_data_module_declares_tab_and_table(module):
 def test_data_module_load_returns_rows(module):
     rows = module.load()
     assert isinstance(rows, list)
-    # Scaffold: no real data yet. When an IC lands, each row matches COLUMNS width.
+    # Row-shape contract: each row is COLUMNS values plus the two provenance values
+    # (Source, As_Of_Date) last — the full header write_data_table lays down. Empty
+    # for modules an IC hasn't filled in yet, so this loop just doesn't run for them.
+    expected_width = len(module.COLUMNS) + len(PROVENANCE_COLUMNS)
     for row in rows:
-        assert len(row) == len(module.COLUMNS)
+        assert len(row) == expected_width
 
 
 @pytest.mark.parametrize("module", DATA_MODULES, ids=MODULE_IDS)
