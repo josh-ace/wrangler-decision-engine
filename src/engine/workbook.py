@@ -9,11 +9,14 @@ individual tabs know only themselves.
 from __future__ import annotations
 
 from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font
 from openpyxl.workbook.defined_name import DefinedName
+from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.worksheet.worksheet import Worksheet
 
 from engine.analysis import ANALYSIS_MODULES
-from engine.data import DATA_MODULES
+from engine.data import DATA_MODULES, mod_pricing
+from engine.xlsx import write_plain_table
 
 # User-owned tabs. Python renders them once and never writes them again — refresh
 # leaves them untouched so user edits survive.
@@ -35,16 +38,80 @@ INPUT_ROWS: list[tuple[str, str | None]] = [
     ("State", "Input_State"),
     ("ZIP", "Input_ZIP"),
     ("Home charging (Y/N)", "Input_Home_Charging"),
+    ("Labor rate ($/hr)", "Input_Labor_Rate"),
 ]
+
+# Default values written into the value cell (column B) at render for the inputs
+# that need a live starting number. Input_Labor_Rate seeds the aftermarket-labor
+# math on Analysis_TrimPath (labor = install hours x this rate); the other inputs
+# stay blank for the user to fill.
+INPUT_DEFAULTS: dict[str, object] = {
+    "Input_Labor_Rate": 120,
+}
+
+# The Target_Build user-input table on Inputs (this design, IC #19). Two columns:
+# the taxonomy display name (joins Features[Feature] / ModPricing[Feature]) and a
+# Yes/No Include flag the user marks. Seeded from mod-pricing coverage.
+TARGET_BUILD_TABLE = "Target_Build"
+TARGET_BUILD_COLUMNS = ["Feature", "Include"]
 
 
 def _render_inputs(ws: Worksheet) -> None:
     ws["A1"] = "Input"
     ws["B1"] = "Value"
-    for offset, (label, _name) in enumerate(INPUT_ROWS, start=2):
+    for offset, (label, name) in enumerate(INPUT_ROWS, start=2):
         ws.cell(row=offset, column=1, value=label)
+        if name in INPUT_DEFAULTS:
+            ws.cell(row=offset, column=2, value=INPUT_DEFAULTS[name])
     ws.column_dimensions["A"].width = 22
     ws.column_dimensions["B"].width = 18
+
+    _render_target_build(ws, start_row=len(INPUT_ROWS) + 3)
+
+
+def _render_target_build(ws: Worksheet, start_row: int) -> None:
+    """Render the Target_Build section below the single-cell inputs block.
+
+    A bold section header + a wrapped explanatory subheader, then a provenance-free
+    Excel Table seeded with every mod-pricing-covered feature (Include="No"), with a
+    Yes/No data-validation dropdown on the Include column. Seeding from mod-pricing
+    coverage (not the full taxonomy) is deliberate: a feature with no aftermarket row
+    has no aftermarket landed-cost path, so it should not be offered as a target.
+    """
+    header_row = start_row
+    ws.cell(row=header_row, column=1, value="Target build").font = Font(bold=True)
+
+    sub = ws.cell(
+        row=header_row + 1,
+        column=1,
+        value=(
+            'Mark Include = "Yes" for each capability your build must reach. Every '
+            "trim path's landed cost is computed to hit exactly these. Aftermarket "
+            "pricing is only defined for the features listed here (the ones with a "
+            "practical aftermarket); factory-only trim hardware still shows as "
+            "standard-embedded where a trim includes it."
+        ),
+    )
+    sub.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # Seed one row per mod-pricing-covered feature. mod_pricing.load() emits the
+    # display name in its Feature column (COLUMNS[0]) — the same id->name map the two
+    # data tabs join by — so reuse it rather than re-deriving the id->name mapping.
+    feature_names = [row[0] for row in mod_pricing.load()]
+    rows = [[name, "No"] for name in feature_names]
+
+    table_start = header_row + 3
+    write_plain_table(
+        ws, TARGET_BUILD_TABLE, TARGET_BUILD_COLUMNS, rows, start_row=table_start
+    )
+
+    # Yes/No dropdown on the Include column (column B) across the data rows, so the
+    # cell reads like a checkbox and can't hold a typo the formulas would miss.
+    first_data = table_start + 1
+    last_data = table_start + len(rows)
+    dv = DataValidation(type="list", formula1='"Yes,No"', allow_blank=False)
+    dv.add(f"B{first_data}:B{last_data}")
+    ws.add_data_validation(dv)
 
 
 def _render_notes(ws: Worksheet) -> None:
