@@ -275,6 +275,93 @@ Git:
 
 ---
 
+## #14 — Scaffolding: walking skeleton with passing tests
+
+- **Spawn when:** any time (foundational — all subsequent code ICs depend on it)
+- **Agent type:** `general-purpose`
+- **Branch:** `scaffolding`
+- **Isolation:** `worktree` (default for all delegated spawns going forward)
+- **Output:** working Python package + minimal .xlsx + green pytest suite
+- **Escalation:** returns for review before any real-data or formula IC spawns
+
+**Prompt:**
+
+```
+You are running the scaffolding workstream for the Wrangler decision engine project.
+
+Read C:\claude\Wrangler\spec.md in full, particularly the "Implementation architecture" section, "Design principles" (especially "Transparency over recommendation" and "MVP over exhaustive"), and the "Report shape" section. Also read C:\claude\Wrangler\workflow.md's "Git model for delegated contexts" section.
+
+Goal: Build a walking skeleton for the system — hello-world bare-bones end-to-end implementation with a passing pytest suite, so subsequent ICs can plug in one module at a time and always leave the repo in a working state. TDD discipline: every module has a unit test; there is an E2E smoke test that validates the whole pipeline before any real data or formulas exist.
+
+Deliverables (all committed on branch `scaffolding`):
+
+1. Python package structure
+   - pyproject.toml using uv-compatible layout (uv is preferred; pip fallback is fine)
+   - src/engine/ package layout with __init__.py and CLI entry point
+   - tests/ directory with pytest configuration
+   - Runtime dependencies: openpyxl, pyyaml, click (or argparse if you prefer)
+   - Dev dependencies: pytest, ruff (linting nice-to-have)
+
+2. CLI stubs
+   - `engine render` — produces a working (if minimal) .xlsx at a designated output path
+   - `engine refresh` — reads an existing .xlsx and (initially) rewrites Data_* tabs in a no-op that preserves the file structure
+   - Both commands exit 0 on success and print clear errors on failure
+
+3. Excel skeleton (produced by `engine render`)
+   - All tabs exist per spec.md's tab structure:
+     User-owned: Inputs, Notes
+     Python-owned Data: Data_Trims, Data_Options, Data_Features, Data_Incentives, Data_Lease, Data_ModPricing, Data_Used, Data_TaxRules, Data_Depreciation
+     Excel-computed Analysis: Analysis_Levers, Analysis_TrimPath, Analysis_Sourcing, Analysis_Financing, Analysis_Timing, Analysis_OngoingCosts, Analysis_Sensitivity
+     Reference: Ref_Provenance, Ref_Legend
+   - Every Data_* tab has an Excel Table with headers + one placeholder row (empty). Future ICs extend by row, not by table.
+   - Ref_Legend contains a brief explanation of the tab structure + ownership model
+   - Named ranges: demonstrate the pattern with at least one named range referencing a table (even if trivial)
+   - No real data, no real formulas — that's for later ICs
+
+4. Module stubs (plug-in points for future ICs)
+   - src/engine/data/ — one Python file per Data_* tab (e.g., trims.py, options.py, features.py, incentives.py, lease.py, mod_pricing.py, used.py, tax_rules.py, depreciation.py). Each exports load() and render() functions (stubs).
+   - src/engine/analysis/ — one file per Analysis_* tab (e.g., trim_path.py, sourcing.py, financing.py, timing.py, ongoing_costs.py, sensitivity.py, levers.py). Each exports setup_formulas() (stub) — formulas are Excel-native but the code sets them up.
+   - src/engine/refresh/ — refresh merge logic (stub)
+   - src/engine/cli.py — the CLI entry point wiring render + refresh commands
+
+5. Tests (pytest)
+   - Unit test per module stub: import the module + trivial assertion establishing the plug-in pattern
+   - E2E smoke test: run `engine render` → verify the .xlsx exists → open it with openpyxl → verify every expected tab exists → verify every Data_* tab has an Excel Table set up → verify at least one named range exists
+   - E2E refresh-preservation test: run `engine render`, modify a cell on the Inputs tab, run `engine refresh`, verify the Inputs cell edit is preserved
+   - All tests pass via `pytest`
+
+6. Documentation
+   - README.md at repo root explaining:
+     - Architecture (Python renders + refreshes; Excel formulas compute)
+     - How to install (uv sync / pip install -e .)
+     - How to run render / refresh / tests
+     - Plug-in pattern for future ICs (which files to edit, which tests to add, which E2E assertions to extend)
+   - No CONTRIBUTING.md needed — the pattern lives in the code + README
+
+Success criteria (all must be true before commit):
+- `pytest` passes green with no skips
+- `engine render` produces a valid .xlsx that opens cleanly in Excel or LibreOffice
+- The .xlsx has all tabs and Excel Table structures per spec
+- All module stubs exist so future ICs know where to plug in
+- README documents the plug-in pattern
+
+Scope boundaries:
+- Do NOT put real data in the .xlsx — empty tables with headers only
+- Do NOT write real formulas in Analysis_* tabs — leave them empty for future ICs
+- Do NOT touch config/order_guide.json — it's the source of truth for IC #1
+- Do NOT add complexity beyond the walking skeleton — every line of code justified by an existing or planned IC that needs it
+
+Git:
+- Work on branch `scaffolding` (create it: `git checkout -b scaffolding`)
+- Commit incrementally with clear messages (e.g., "scaffold Python package", "add openpyxl render stub", "add E2E smoke test")
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: substantial — foundational work. Take the time to get the plug-in pattern right; subsequent ICs will depend on the discipline this one establishes.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
