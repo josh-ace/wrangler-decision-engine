@@ -598,6 +598,115 @@ Time budget: substantial — this is data curation with retailer research. Prior
 
 ---
 
+## #18 — IC #4: Analysis_TrimPath design doc (formulas as markdown)
+
+- **Spawn when:** any time (IC #17 complete; independent of implementation IC)
+- **Agent type:** `general-purpose`
+- **Branch:** `analysis-trim-path-design`
+- **Isolation:** `worktree`
+- **Output:** `analysis-designs/trim_path.md` (design doc only; no code changes); reviewed at hub before IC #19 implements
+
+**Prompt:**
+
+```
+You are running IC #4 of the vertical-slice sequence — the first *formula design* IC. Your job is to produce a design document for Analysis_TrimPath: how the tab should be laid out, what Excel formulas compute the three-price transparency, and a worked example proving the math against known ground truth. No code changes yet — that's IC #19.
+
+Read:
+- C:\claude\Wrangler\spec.md sections "Multi-axis decision framework", "Report shape" (especially the "Trim path" three-price example under section 3), "Implementation architecture" (tab structure + Excel Tables discipline), and "Design principles" (especially "Transparency over recommendation", "No false precision", and "Community-anchored calibration")
+- C:\claude\Wrangler\README.md's plug-in pattern
+- C:\claude\Wrangler\data\features.json (feature taxonomy — 38 entries; note that standard_on lists are trim-name-only, not body-style-specific)
+- C:\claude\Wrangler\data\mod_pricing.json (20 aftermarket pricing entries keyed to feature_id)
+- The rendered .xlsx that engine render produces (or inspect via openpyxl): Data_Trims has 28 configuration rows; Data_Features has 38 rows; Data_ModPricing has 20 rows
+
+Goal: produce a design document at `analysis-designs/trim_path.md` that specifies exactly what Analysis_TrimPath displays and what Excel formulas compute it — such that IC #19 can implement the tab mechanically without further design decisions.
+
+Deliverables (committed on branch analysis-trim-path-design):
+
+1. `analysis-designs/trim_path.md` — the design document. Structure:
+
+   ## Purpose
+   One paragraph: what the tab shows and why (per spec's "Report shape" section 3 trim-path).
+
+   ## Target build encoding on Inputs tab
+   Propose how the user specifies their target build. Recommended approach: Python renders a target-build section on the Inputs tab with one row per aftermarket-target feature (from mod_pricing.json's coverage), each with a Yes/No or checkbox column the user marks. Specify:
+   - Section header + explanatory subheader on the Inputs tab
+   - Table structure (Feature Name column + Include? column)
+   - How Python populates it on first render (reads mod_pricing.json's covered features; user marks after)
+   - Excel Table name (e.g., "Target_Build") so formulas can use structured references
+   - What happens on refresh — does Python overwrite the Target_Build section (breaking user selections) or leave it alone? (Rule: leave user selections intact; only add rows for newly-covered features on refresh, don't remove.)
+
+   ## New named ranges required
+   List every named range Analysis_TrimPath needs beyond what scaffolding already provides. At minimum: Input_Labor_Rate (user's shop labor $/hr). Note that adding these is a small workbook.py edit IC #19 will make.
+
+   ## Analysis_TrimPath layout
+   Concrete row/column mockup showing the tab structure. Recommendation: two sections in one tab.
+   - Top: per-trim summary — one row per configuration (from Data_Trims, 28 rows), columns for Base_MSRP, Factory_Options_Cost, Aftermarket_Cost, Aftermarket_Labor_Cost, Landed_Cost, and a Delta_vs_Cheapest column
+   - Bottom: per-feature-per-trim breakdown — long format, one row per (configuration × target-build feature), columns showing whether it's Standard on this trim, Factory Option Price (null for MVP since per-trim option pricing lives in Data_Options which we haven't wired yet), Aftermarket Price (parts + labor), Contribution_to_Landed (which category actually applies for this trim)
+   Alternative layouts are welcome if you can justify them. Pick one.
+
+   ## Formulas per cell type
+   For every column that uses a formula, write the Excel formula as text using structured references (e.g., `INDEX(ModPricing[Parts_Cost], MATCH(...))` — never `A2:A20`). Cover:
+   - Standard-on check: is feature X in this trim's standard_on comma-string?
+   - Aftermarket parts cost lookup from Data_ModPricing joined by Feature name
+   - Aftermarket labor cost = install_hours × Input_Labor_Rate
+   - Total aftermarket contribution per feature (0 if standard on this trim; else parts + labor)
+   - Landed cost per trim = Base_MSRP + sum of aftermarket contributions for target-build features
+   - Delta_vs_Cheapest across trims
+   Note explicitly: Data_Features standard_on is comma-joined string; formulas will use ISNUMBER(SEARCH(...)) or similar. Note the exact pattern.
+   Note gaps: factory option pricing is null in MVP (Data_Options isn't populated yet). The design should either (a) treat factory-option paths as unavailable in MVP with a clear "N/A pending Data_Options" note, or (b) propose a stub that's obviously placeholder. Recommend (a).
+
+   ## Worked example — community-anchored calibration
+   Pick a specific target build:
+   - Rear locker + 35" tires + rock rails + steel front bumper + winch
+   Show the computed landed cost for these three paths using ACTUAL data from data/features.json + data/mod_pricing.json + Data_Trims:
+   - JLU 4-door **Sport** V6 8AT + all mods aftermarket
+   - JLU 4-door **Willys** V6 8AT + mods needed to reach target
+   - JLU 4-door **Rubicon** V6 8AT + mods needed to reach target
+   Enumerate for each: base MSRP, which features are already standard, which mods are needed, parts cost, install hours × assumed labor rate ($120/hr), total landed. Show your math cell by cell.
+   Reality-check against community wisdom: Sport-plus-mods should come out numerically cheaper than at-target Rubicon by roughly $8-12k, but the design doc should note the trade-offs (warranty on driveline mods, resale, time to build) that the tool captures in *other* layers (this is critical for the transparency framing).
+
+   ## Test cases for IC #19 to validate against
+   List specific assertions the E2E test should check after IC #19 implements this:
+   - Landed cost for JLU Sport V6 8AT + target build matches the worked example within $50 (accounting for potential price refresh)
+   - Landed cost for JLU Rubicon V6 8AT + target build matches within $50
+   - Sport-plus-mods landed < Rubicon-at-target landed by at least $5,000 (calibration guard rail)
+   - No formula references hardcoded cell addresses (grep for `\$A\$` — should return 0 hits inside formulas)
+   - The Trims_MSRP named range still resolves after the tab is added
+
+   ## Implementation notes for IC #19
+   Enumerate any workbook.py / xlsx.py / Data_* changes required by this design. At minimum:
+   - Add Input_Labor_Rate named range to Inputs tab (with a sensible default cell value of $120/hr)
+   - Render the Target_Build section on Inputs tab (Python side)
+   - Modify Analysis_TrimPath setup_formulas() to write the two-section layout with real formulas
+   - Consider whether xlsx.py needs a helper for formula-writing (probably not — openpyxl handles it, but flag it if the discipline benefits)
+
+2. Do NOT touch any code. This IC is design only. If you find issues in the data (features.json errors, mod_pricing gaps), NOTE them at the end of the design doc for a follow-on IC to fix — do not fix them here.
+
+3. Do NOT modify workflow.md, spec.md, or README.md. If the design changes any commitment in spec.md, flag it at the end of the design doc; the strategic hub will integrate.
+
+Success criteria (all must be true before commit):
+- analysis-designs/trim_path.md exists and is complete per the structure above
+- The worked example uses REAL data values from features.json, mod_pricing.json, and (for MSRPs) the parsed order guide reachable via engine render
+- Every formula in the doc uses structured references (Trims[MSRP], ModPricing[Parts_Cost], Features[Standard_On], Target_Build[Include]) — no `$A$2:$A$20` patterns
+- The Sport-vs-Rubicon calibration comes out roughly right (Sport-plus-mods cheaper by ~$8-12k on parts alone)
+- No code files touched; pytest is unchanged; ruff is unchanged
+
+Scope boundaries:
+- Design doc ONLY — no code, no data changes
+- Do not implement anything — the design is IC #19's execution spec
+- Do not propose formula patterns for other Analysis_* tabs (Sourcing, Financing, etc.) — one tab at a time
+
+Git:
+- Work on branch `analysis-trim-path-design` (create it: `git checkout -b analysis-trim-path-design`)
+- Commit as you go (design doc drafts count as commits)
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: substantial — this is design work that unlocks the vertical slice's proof point. The worked example carrying real numbers is critical; don't rush it.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
