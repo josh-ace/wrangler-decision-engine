@@ -14,7 +14,7 @@ from openpyxl import load_workbook
 
 from engine.analysis import ANALYSIS_MODULES
 from engine.cli import main
-from engine.data import DATA_MODULES, features, trims
+from engine.data import DATA_MODULES, features, mod_pricing, trims
 from engine.workbook import (
     INPUTS_TAB,
     NOTES_TAB,
@@ -134,6 +134,38 @@ def test_data_features_has_real_taxonomy_rows(tmp_path):
     assert "Rubicon" in by_feature["Rear Locker"]["Standard_On"]
     rock_rails = by_feature["Rock Rails"]["Standard_On"]
     assert "Willys" in rock_rails and "Rubicon" in rock_rails
+
+
+def test_data_mod_pricing_has_real_rows_joined_to_features(tmp_path):
+    runner = CliRunner()
+    out = tmp_path / "wrangler.xlsx"
+    assert runner.invoke(main, ["render", "-o", str(out)]).exit_code == 0
+
+    wb = load_workbook(out)
+
+    # Every ModPricing Feature must be a real Data_Features name (the join key).
+    feature_rows = _read_table_rows(wb[features.TAB_NAME], features.COLUMNS)
+    feature_names = {row["Feature"] for row in feature_rows}
+
+    ws = wb[mod_pricing.TAB_NAME]
+    rows = _read_table_rows(ws, mod_pricing.COLUMNS)
+
+    # Real rows exist (not the empty-placeholder scaffold).
+    assert len(rows) > 0
+
+    for row in rows:
+        # Feature name resolves to a feature in Data_Features.
+        assert row["Feature"] in feature_names, row["Feature"]
+        # Parts cost + install hours are populated with sane values.
+        assert row["Parts_Cost"] is not None and row["Parts_Cost"] > 0
+        assert row["Install_Hours"] is not None and row["Install_Hours"] >= 0
+        # Provenance is populated per-row.
+        assert "curator" in row["Source"]
+        assert row["As_Of_Date"] == "2026-07-18"
+
+    # Spot-check a headline mod-target join: the rear locker is priced.
+    by_feature = {row["Feature"]: row for row in rows}
+    assert by_feature["Rear Locker"]["Parts_Cost"] > 0
 
 
 def test_refresh_preserves_user_edits(tmp_path):

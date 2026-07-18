@@ -1,0 +1,339 @@
+{
+  "schema_version": "1.0",
+  "title": "2026 Jeep Wrangler JL — Aftermarket Mod Pricing (curated)",
+  "provenance": {
+    "source": "aftermarket_retailers + curator",
+    "as_of_date": "2026-07-18"
+  },
+  "provenance_note": "Aftermarket parts cost + install hours per mod-target feature, keyed to data/features.json feature ids. Prices are representative typical-configuration list prices captured on as_of_date from public retailer catalogs; they are known to be sale/coupon-driven and WILL drift (a refresh will re-pull). No retailer publishes an install-labor DOLLAR figure, so this file intentionally emits Install_Hours only — Analysis_TrimPath multiplies hours by a user-input labor rate from Inputs (not stored here). Install-hours are taken from ExtremeTerrain product pages where published (the only source that lists them) and are curator estimates from typical 4x4-shop labor otherwise; each entry's notes flag which. Feature SELECTION is curator judgment: only features with a practical, commonly-installed aftermarket are priced (see scope_note) — many features.json ids (transfer-case swaps, drive modes, factory ADAS, interior tech) have no meaningful aftermarket and are deliberately omitted, so this file has fewer rows than features.json. Hence the '+ curator' source tag, matching the features.json pattern.",
+  "scope_note": "INCLUDED: features that are common, practical Wrangler aftermarket builds — lockers, regear, sway-bar articulation (Currie Antirock as the functional equivalent of the factory electronic disconnect), lift kits (mild and larger), 33/35 tires + wheels, rock rails, steel bumpers, winch, skid plates, high-clearance fenders, LED lighting, an auxiliary switch panel, an aftermarket hard top, and a trailer-hitch retrofit. OMITTED (no practical aftermarket / out of scope): Rock-Trac 4:1 and Selec-Trac/Command-Trac transfer cases (impractical swaps), Off-Road+ and Selec-Speed crawl (software drive modes), heavy-duty axle housings (axle swap is a regear-adjacent big-ticket job most builders reach via regear, priced under axle_ratio_410), Sky One-Touch / Dual Top (OEM-only power/bundled tops), Uconnect 5 / Alpine audio / off-road camera / heated seats / leather (interior tech + comfort, out of scope), and blind-spot / adaptive-cruise / forward-collision / park-assist (factory ADAS with no meaningful bolt-on). No half-door / tube-door entry exists because features.json has no such feature id.",
+  "retailers": {
+    "quadratec": {
+      "url": "https://www.quadratec.com/",
+      "reliability_tier": "HIGH",
+      "note": "4xe fitment authority per discovery/report.md §2.5 — explicit fits/excludes-4xe flags, itemized price/brand/part#/stock."
+    },
+    "extremeterrain": {
+      "url": "https://www.extremeterrain.com/",
+      "reliability_tier": "HIGH",
+      "note": "Only source publishing install HOURS + difficulty (per §2.5); used as the install-hours seed wherever a product page lists it."
+    },
+    "northridge4x4": {
+      "url": "https://www.northridge4x4.com/",
+      "reliability_tier": "HIGH",
+      "note": "Per-component kit costing (strongest for suspension/armor) per §2.5. Documented reliable source; cross-check for premium suspension/armor pricing."
+    },
+    "summitracing": {
+      "url": "https://www.summitracing.com/",
+      "reliability_tier": "MEDIUM",
+      "note": "General performance-parts catalog; used only to anchor ring-and-pinion regear kit pricing. Not a Jeep-fitment specialist, so tier is MEDIUM here."
+    }
+  },
+  "pricing": [
+    {
+      "feature_id": "rear_locker",
+      "parts_cost": 1200,
+      "parts_cost_range": { "low": 1050, "high": 1600 },
+      "install_hours": 5,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "ARB Air Locker RD245 (32-spline M210/M220, all gear ratios), 18-26 JL",
+          "url": "https://www.quadratec.com/p/arb/air-locker-locking-differential-wrangler-jl-gladiator-jt/32-spline-m210-m220-rd245"
+        }
+      ],
+      "notes": "Rear e-locker for a non-Rubicon axle. Typical = self-contained Eaton E-Locker (~$1,050-1,200, no air source needed). Range high = ARB Air Locker RD245 ($1,299.95 captured) plus a compressor (~$250) since ARB needs an air source. Install hours are a curator estimate (~5h): pulling axle shafts, R&R the carrier, and setting up backlash/pattern is precision diff work usually shop-done. Warranty note: driveline mod — see Magnuson-Moss (spec class #14)."
+    },
+    {
+      "feature_id": "front_locker",
+      "parts_cost": 1300,
+      "parts_cost_range": { "low": 1050, "high": 1600 },
+      "install_hours": 5,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "ARB Air Locker RD245 (32-spline M210/M220) — same part covers the front M210",
+          "url": "https://www.quadratec.com/p/arb/air-locker-locking-differential-wrangler-jl-gladiator-jt/32-spline-m210-m220-rd245"
+        }
+      ],
+      "notes": "Front e-locker (ARB RD245 fits the M210 front, $1,299.95 captured). Almost always installed together with the rear, sharing one compressor — so the standalone front cost here overlaps the rear's compressor allowance. Install hours (~5h) are a curator estimate; front adds CAD/axle-shaft handling over the rear. Range mirrors rear_locker."
+    },
+    {
+      "feature_id": "axle_ratio_410",
+      "parts_cost": 800,
+      "parts_cost_range": { "low": 550, "high": 1000 },
+      "install_hours": 8,
+      "retailer_sources": [
+        {
+          "retailer": "summitracing",
+          "product": "4.56:1 ring-and-pinion gear sets w/ install kit (Yukon / Motive / USA Standard), 9.5in ring gear",
+          "url": "https://www.summitracing.com/search/part-type/ring-and-pinion-gears/ring-and-pinion-ratio/4-56-1"
+        },
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL ring & pinion regear kits (front + rear)",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-gears.html"
+        }
+      ],
+      "notes": "Regear (typ. 4.56 or 4.88) to restore drivability on 35s — the common substitute for a factory 4.10 axle on Sport/Sport S. Parts = ring-and-pinion sets (~$250-350/axle) plus master install kits (~$80/axle) for BOTH axles; low = one axle / budget gears, high = premium gears both axles. Install hours (~8h) are a curator estimate: regearing both axles is precision setup, effectively always shop-done. Pairs naturally with a 35s tire/lift build."
+    },
+    {
+      "feature_id": "sway_bar_disconnect",
+      "parts_cost": 545,
+      "parts_cost_range": { "low": 250, "high": 600 },
+      "install_hours": 1.5,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "RockJock/Currie Antirock Front Anti-Rock Sway Bar Kit w/ forged arms (CE-9900JLF), 18-26 JL/JT",
+          "url": "https://www.quadratec.com/p/currie-enterprises/front-anti-rock-sway-bar-kit-jeep-wrangler-jl"
+        }
+      ],
+      "notes": "Functional equivalent of the Rubicon-only electronic front sway-bar disconnect: the Currie/RockJock Antirock ($544.54 captured) delivers articulation passively — no electronics. Range low = simple manual quick-disconnect end links (~$250) for a budget path; high = full Antirock kit. Install hours (~1.5h) are a curator estimate (bolt-on front sway bar)."
+    },
+    {
+      "feature_id": "willys_suspension",
+      "parts_cost": 1050,
+      "parts_cost_range": { "low": 550, "high": 1600 },
+      "install_hours": 4,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Teraflex 2.5in Coil Spring Base Lift Kit w/ 9550 VSS shocks (1354250), 18-26 JL 4dr",
+          "url": "https://www.extremeterrain.com/teraflex-jeep-wrangler-250-inch-coil-spring-base-lift-kit-with-9550-vss-shocks-1354250.html"
+        },
+        {
+          "retailer": "extremeterrain",
+          "product": "Rough Country 2.5in Spring Lift Kit w/ N3 shocks (67731) — budget tier",
+          "url": "https://www.extremeterrain.com/rough-country-jeep-wrangler-25-inch-spring-suspension-lift-kit-with-premium-n3-shocks-67731.html"
+        }
+      ],
+      "notes": "Mild ~2-2.5in lift, the aftermarket analog of the Willys off-road suspension. Typical = Teraflex 2.5in w/ 9550 VSS ($1,047.98 captured). Install hours = 4 (published on the Teraflex ET page, difficulty 'mechanical expertise or professional installation required'). Range low = budget spring+shock kit (Rough Country ~$550), high = premium coilover-style setup."
+    },
+    {
+      "feature_id": "factory_35_suspension",
+      "parts_cost": 1800,
+      "parts_cost_range": { "low": 1200, "high": 2800 },
+      "install_hours": 6,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL 3-3.75in lift kits (Teraflex / Rock Krawler / Clayton) — geometry-corrected for 35s",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-suspension-lift-kits-3inch.html"
+        }
+      ],
+      "notes": "Larger ~3-3.5in lift to clear and properly run 35s (the aftermarket route to the factory 35-inch suspension geometry). Typical ~$1,800 for a mid premium kit with adjustable control arms + track bars; low = simpler 3in spring/shock, high = full geometry-correction kit with adjustable arms, drop brackets, and premium shocks. Install hours (~6h) are a curator estimate (more arms/brackets than the mild lift). Cross-refs tires_35_factory and axle_ratio_410."
+    },
+    {
+      "feature_id": "tires_33",
+      "parts_cost": 1400,
+      "parts_cost_range": { "low": 1000, "high": 1800 },
+      "install_hours": 1.5,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL 33in mud-terrain tires (LT285/70R17-class) — set of 5",
+          "url": "https://www.extremeterrain.com/jeep-wrangler-tires.html"
+        }
+      ],
+      "notes": "~33in MT tires only (fit on the factory 17in off-road wheels), set of 5 incl. spare at ~$250-320 ea. Wheels priced separately under off_road_wheels_17. Install hours (~1.5h) are a curator estimate for mount/balance of 5. Low/high = budget vs premium MT compound."
+    },
+    {
+      "feature_id": "tires_35_factory",
+      "parts_cost": 1700,
+      "parts_cost_range": { "low": 1250, "high": 2100 },
+      "install_hours": 1.5,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL 35in tires (315/70R17-class) — set of 5",
+          "url": "https://www.extremeterrain.com/jeep-wrangler-tires.html?ta%24147=35"
+        }
+      ],
+      "notes": "35in tires only, set of 5 incl. spare at ~$300-380 ea. Running 35s typically forces a lift (factory_35_suspension) and a regear (axle_ratio_410) — those costs live in their own entries, not here. Install hours (~1.5h) curator estimate for mount/balance. Low/high = budget vs premium compound."
+    },
+    {
+      "feature_id": "off_road_wheels_17",
+      "parts_cost": 1000,
+      "parts_cost_range": { "low": 600, "high": 1500 },
+      "install_hours": 1,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL 17in off-road wheels — set of 5",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-wheels-tires.html"
+        }
+      ],
+      "notes": "17in off-road wheels sized for tall tires, set of 5 at ~$150-250 ea. Usually bought together with a tire package (tires_33 / tires_35_factory), so the incremental mount labor overlaps those. Install hours (~1h) curator estimate. Range high = beadlock-capable / beadlock wheels."
+    },
+    {
+      "feature_id": "rock_rails",
+      "parts_cost": 780,
+      "parts_cost_range": { "low": 400, "high": 1100 },
+      "install_hours": 2,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Rugged Ridge XHD Rock Sliders (11504.32), 18-26 JL 4dr",
+          "url": "https://www.extremeterrain.com/rugged-ridge-jeep-wrangler-xhd-rock-sliders-1150432.html"
+        }
+      ],
+      "notes": "Steel rock sliders guarding the rockers. Typical = Rugged Ridge XHD 4-door ($779.99; 2-door is $599.99). Install ~2h (ET notes 'no drilling, most installs under 2 hours'). Low = budget tube sliders, high = premium sliders with kick-out/step."
+    },
+    {
+      "feature_id": "steel_bumpers",
+      "parts_cost": 1300,
+      "parts_cost_range": { "low": 800, "high": 2200 },
+      "install_hours": 3,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "Smittybilt XRC Gen 3 Front Bumper (SB77808), 07-26 JK/JL/JT",
+          "url": "https://www.quadratec.com/p/smittybilt/xrc-gen-3-front-bumper-wrangler-jk-jl-gladiator-jt-sb77808"
+        },
+        {
+          "retailer": "quadratec",
+          "product": "JL front steel bumper category (winch-ready options)",
+          "url": "https://www.quadratec.com/vehicle/jeep-wrangler-jl-parts/bumpers/front-bumpers"
+        }
+      ],
+      "notes": "Steel FRONT + REAR bumpers (the feature covers both). Typical = ~$800 front (Smittybilt XRC Gen 3 $809.99 captured, winch-ready) + ~$500 rear. Low = winch-ready front only (budget); high = premium front+rear (e.g., stubby/full-width with tire carrier). Install hours (~3h) curator estimate for the pair. Front bumper is a prerequisite for a winch (see winch)."
+    },
+    {
+      "feature_id": "winch",
+      "parts_cost": 800,
+      "parts_cost_range": { "low": 400, "high": 1800 },
+      "install_hours": 2,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "JL winches (Warn VR EVO 10-S / Zeon, Smittybilt X2O) — synthetic-rope 10k class",
+          "url": "https://www.quadratec.com/vehicle/jeep-wrangler-jl-parts/winches-recovery/winches"
+        }
+      ],
+      "notes": "Recovery winch (~10k lb, synthetic line). Typical ~$800 (Warn VR EVO 10-S class); low = budget Smittybilt X2O (~$400), high = premium Warn Zeon (~$1,650-1,800). The factory Warn option is $1,995 for reference. Requires a winch-ready steel bumper (steel_bumpers) — not double-counted here. Install hours (~2h) curator estimate (mount + wiring)."
+    },
+    {
+      "feature_id": "skid_plates",
+      "parts_cost": 900,
+      "parts_cost_range": { "low": 400, "high": 1500 },
+      "install_hours": 3,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "Quadratec Aluminum Modular Skid Plate System, 18-26 JL 4dr 3.6L",
+          "url": "https://www.quadratec.com/p/quadratec/aluminum-modular-skid-plate-system-jeep-wrangler-jl-unlimited-4-door"
+        }
+      ],
+      "notes": "Underbody armor for the non-Rubicon trims (Rubicon already has T-case + fuel-tank skids). Typical = a modular aluminum system (~$900). Low = transfer-case/oil-pan skids only; high = full belly-pan aluminum system with crossmembers. Install hours (~3h) curator estimate."
+    },
+    {
+      "feature_id": "highline_fenders",
+      "parts_cost": 700,
+      "parts_cost_range": { "low": 350, "high": 1200 },
+      "install_hours": 3,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "MP Concepts High Clearance Fender Flares, front (J139279-JL) + rear (J138355-JL)",
+          "url": "https://www.extremeterrain.com/mp-concepts-jeep-wrangler-high-clearance-fender-flares-j163456-jl.html"
+        }
+      ],
+      "notes": "High-clearance fender flares for larger-tire clearance (front ~$660 + rear ~$350 captured, set ~$700-1,010). Low = budget tube fenders; high = premium (MetalCloak). Install hours (~3h) curator estimate; front/rear flare swap with side-marker/turn-signal relocation. Aids clearance when running 35s."
+    },
+    {
+      "feature_id": "led_headlamps",
+      "parts_cost": 250,
+      "parts_cost_range": { "low": 100, "high": 900 },
+      "install_hours": 1,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL 7in LED projector headlights (pair)",
+          "url": "https://www.extremeterrain.com/jeep-wrangler-led-projector-headlights-black-j137654-jl.html"
+        }
+      ],
+      "notes": "7in LED headlight pair — the common early upgrade over base Sport halogens. Typical ~$250 (quality plug-in pair); low ~$100 (budget), high ~$900 (JW Speaker / KC Gravity Pro). Install hours (~1h) curator estimate (plug-and-play, occasional anti-flicker harness)."
+    },
+    {
+      "feature_id": "led_fog_lamps",
+      "parts_cost": 130,
+      "parts_cost_range": { "low": 60, "high": 300 },
+      "install_hours": 0.5,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL LED fog lights (pair)",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-lights.html"
+        }
+      ],
+      "notes": "Front LED fog lamp pair. Typical ~$130; low ~$60 (budget), high ~$300 (premium). Install hours (~0.5h) curator estimate (direct replacement). Often bundled with led_headlamps as a lighting group."
+    },
+    {
+      "feature_id": "led_taillamps",
+      "parts_cost": 250,
+      "parts_cost_range": { "low": 150, "high": 500 },
+      "install_hours": 0.5,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL LED tail lights (pair) — e.g., Form Lighting / Quake LED",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-taillights.html"
+        }
+      ],
+      "notes": "LED tail light pair. Typical ~$250 (Form Lighting $269.10 captured); low ~$150, high ~$500 (flush-mount / sequential). Install hours (~0.5h) curator estimate (plug-and-play)."
+    },
+    {
+      "feature_id": "aux_switches",
+      "parts_cost": 500,
+      "parts_cost_range": { "low": 250, "high": 750 },
+      "install_hours": 2,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "sPOD SourceLT Wireless Switch Controller, 18-26 JL 4dr/JT",
+          "url": "https://www.quadratec.com/p/spod/sourcelt-wireless-switch-controller-wrangler-jl-unlimited-gladiator-jt"
+        },
+        {
+          "retailer": "quadratec",
+          "product": "Trigger 6 Shooter switch system (overhead mount + relay) — budget tier",
+          "url": "https://www.quadratec.com/p/trigger/6-shooter-system-overhead-switch-mount-kit-jeep-wrangler-jl-gladiator-jt"
+        }
+      ],
+      "notes": "Aftermarket auxiliary switch panel for clean accessory/light/winch wiring — the aftermarket route to the factory upfit switches. Typical ~$500 (sPOD SourceLT $594 captured); low ~$250 (Trigger 6-shooter), high ~$750 (sPOD/Switch-Pros with power module). Install hours (~2h) curator estimate (relay/fuse box mount + wiring)."
+    },
+    {
+      "feature_id": "hard_top",
+      "parts_cost": 1400,
+      "parts_cost_range": { "low": 900, "high": 2500 },
+      "install_hours": 1,
+      "retailer_sources": [
+        {
+          "retailer": "quadratec",
+          "product": "Smittybilt aftermarket hard tops for JL",
+          "url": "https://www.quadratec.com/brand/smittybilt/hardtops"
+        }
+      ],
+      "notes": "Aftermarket hard top for a soft-top trim (Sport/Sport S/Willys/Sahara). Aftermarket hardtop availability for the JL is thin (mostly OEM/Mopar), so typical ~$1,400 reflects a limited market; low ~$900, high ~$2,500 approaching the factory HT1/HT3 option price ($1,895-2,195). Install hours (~1h) curator estimate — bolt-on but a heavy two-person lift. Note: this is a lateral top swap, not a capability mod."
+    },
+    {
+      "feature_id": "trailer_tow_prep",
+      "parts_cost": 300,
+      "parts_cost_range": { "low": 150, "high": 500 },
+      "install_hours": 2,
+      "retailer_sources": [
+        {
+          "retailer": "extremeterrain",
+          "product": "Jeep JL receiver hitches + 4/7-pin wiring (Mopar / CURT / Rugged Ridge)",
+          "url": "https://www.extremeterrain.com/wrangler-jeep-jl-receiver-hitches.html"
+        },
+        {
+          "retailer": "quadratec",
+          "product": "JL hitches category",
+          "url": "https://www.quadratec.com/vehicle/jeep-wrangler-jl-parts/hitches-racks/hitches"
+        }
+      ],
+      "notes": "Trailer-hitch retrofit for trims without factory tow prep. Typical ~$300 = receiver (Mopar $265.50 / CURT $165 / Rugged Ridge $119 captured) plus a 4/7-pin wiring harness (~$100). Low = hitch only; high = hitch + harness + relay/module. Install hours (~2h) curator estimate (bolt-on receiver + wiring tap)."
+    }
+  ]
+}
