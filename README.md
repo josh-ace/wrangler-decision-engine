@@ -69,11 +69,17 @@ in one module and the rest of the pipeline (render, refresh, tests) keeps workin
 ### To add real data to a `Data_*` tab
 
 1. Edit the module in `src/engine/data/` (e.g. `trims.py`). Implement `load()` to
-   return a list of rows, each matching `COLUMNS` (the renderer appends the
-   `Source` / `As_Of_Date` provenance columns automatically). Nothing else changes
-   — `render()` and refresh already lay the table down.
+   return a list of rows. **Each row is your `COLUMNS` values followed by the two
+   provenance values (`Source`, `As_Of_Date`) as its last two elements** — i.e. a
+   row is `len(COLUMNS) + 2` wide, matching the full header
+   (`COLUMNS + PROVENANCE_COLUMNS`) the renderer lays down. The renderer writes rows
+   verbatim; it does *not* append provenance for you, so the module emits it. Keeping
+   provenance per-row lets a refresh date each value honestly. Nothing else changes —
+   `render()` and refresh already lay the table down. See `data/trims.py` for the
+   reference implementation.
 2. The unit test in `tests/test_data_modules.py` already asserts `load()` returns
-   rows the width of `COLUMNS`; it starts passing with real data for free.
+   rows the width of `COLUMNS + PROVENANCE_COLUMNS`; it starts passing with real data
+   for free.
 3. Extend `tests/test_e2e.py` with any content assertions specific to your data.
 
 A *new* data tab: add one module in `src/engine/data/`, then append it to
