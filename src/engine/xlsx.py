@@ -10,7 +10,7 @@ and how to clear one for a refresh, so every data module stays a thin declaratio
 from __future__ import annotations
 
 from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.worksheet.table import Table, TableColumn, TableFormula, TableStyleInfo
 from openpyxl.worksheet.worksheet import Worksheet
 
 # Provenance columns appended to every Data_* table. Per spec's MVP provenance
@@ -54,6 +54,29 @@ def _lay_table(
 
     table = Table(displayName=table_name, ref=ref)
     table.tableStyleInfo = _TABLE_STYLE
+
+    # Explicitly declare TableColumn objects so we can attach a
+    # calculatedColumnFormula to formula columns. openpyxl otherwise leaves
+    # ``tableColumns`` empty until serialize time, generating column definitions
+    # from the ref range without any per-column metadata — which strips the
+    # calculated-column marker Excel needs to resolve ``[@X]`` structured
+    # references inside per-cell formulas. Without this marker, Excel treats
+    # each cell as a standalone formula and ``[@Trim]`` fails (#REF! on direct
+    # concat; SUMIFS returns 0 because the ref evaluates to empty). Data_*
+    # tables have no formula cells, so their columns simply carry the name.
+    first_row = data_rows[0] if data_rows else []
+    columns: list[TableColumn] = []
+    for col_idx, name in enumerate(header, start=1):
+        tc = TableColumn(id=col_idx, name=name)
+        if col_idx <= len(first_row):
+            cell_val = first_row[col_idx - 1]
+            if isinstance(cell_val, str) and cell_val.startswith("="):
+                tc.calculatedColumnFormula = TableFormula(
+                    array=False, attr_text=cell_val[1:]
+                )
+        columns.append(tc)
+    table.tableColumns = columns
+
     ws.add_table(table)
 
     # Sensible starting widths so the tabs are legible on open.

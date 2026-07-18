@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from openpyxl import Workbook
 
-from engine.xlsx import PROVENANCE_COLUMNS, clear_data_table, write_data_table
+from engine.xlsx import PROVENANCE_COLUMNS, clear_data_table, write_data_table, write_plain_table
 
 
 def test_write_data_table_appends_provenance_columns():
@@ -38,3 +38,24 @@ def test_clear_data_table_removes_table_and_cells():
     clear_data_table(ws, "Demo")
     assert "Demo" not in ws.tables
     assert ws["A1"].value is None
+
+
+def test_formula_columns_get_calculated_column_formula():
+    """Regression test: formula cells inside a table only resolve [@X] references
+    in Excel when the TableColumn carries calculatedColumnFormula. Without it,
+    Excel treats each cell as a standalone formula and [@Trim] fails. The fix
+    auto-detects formula columns (first data row starts with '=') and attaches
+    the marker; this asserts it fires end-to-end.
+    """
+    wb = Workbook()
+    ws = wb.active
+    formula = '=[@A]&"-"&[@B]'
+    write_plain_table(ws, "Demo", ["A", "B", "C"], rows=[["x", "y", formula]])
+    table = ws.tables["Demo"]
+    a_col, b_col, c_col = table.tableColumns
+    # Literal columns get no calculated formula.
+    assert a_col.calculatedColumnFormula is None
+    assert b_col.calculatedColumnFormula is None
+    # Formula column has one, matching the cell body (without leading '=').
+    assert c_col.calculatedColumnFormula is not None
+    assert c_col.calculatedColumnFormula.attr_text == '[@A]&"-"&[@B]'
