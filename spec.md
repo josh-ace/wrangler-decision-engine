@@ -6,10 +6,80 @@ Make the true cost structure of a 2026 Jeep Wrangler purchase visible, so the an
 
 ## Two artifacts
 
-1. **Engine** — reproducible model. Ingests config data + personal inputs + market-dynamic data. Runs the same math per decision layer per candidate path. Provenance-tracked, editable, versioned.
-2. **Report** — the one artifact the user reads. Decomposes the decision layer by layer, sizes each lever in dollars, exposes the value structure per layer. No ranking, no composite score — transparency.
+1. **Engine (Python)** — data loader + renderer. Parses raw sources, fetches market data, renders the .xlsx, merges refreshes. Does *not* run calculations at use-time. See "Implementation architecture" below.
+2. **Report (multi-tab .xlsx)** — the one artifact the user reads and works out of. All calculations live as Excel formulas in the file. Decomposes the decision layer by layer, sizes each lever in dollars, exposes the value structure per layer. No ranking, no composite score — transparency. Self-contained; portable; user never needs Python to *use* the tool.
 
-The report is the deliverable. The engine is what makes the report defensible and re-runnable.
+The .xlsx is the deliverable. Python is the mechanism for producing and updating it.
+
+## Implementation architecture
+
+**Python is a data loader and renderer, not a runtime engine.** Once the .xlsx is rendered, it's a self-contained tool — Excel formulas drive all calculations; the user never needs Python to *use* the tool, only to refresh market data. Push calculations into Excel; keep Python's role minimal.
+
+### Division of labor
+
+**Python** does:
+- Parse raw sources (order guides, IRS pages, forum threads) into structured JSON/YAML
+- Fetch/scrape market data on demand (`engine refresh`)
+- Initial render of the .xlsx from data + formula scaffolding (`engine render`)
+- Refresh writes only into designated `Data_*` tabs; preserves user tabs and analysis tabs
+
+**Excel** does:
+- Every calculation via formulas (feature-value math, three-price transparency, sourcing delta, financing mechanism, ongoing costs, sensitivity)
+- Formatting and presentation
+- Interactive what-if via cell edits
+- Provenance display (source + as_of_date visible per value)
+
+**User** does:
+- Edits `Inputs` and `Notes` tabs
+- Reads analysis tabs
+- Runs `engine refresh` only when they want fresh market data
+
+### Discipline: Excel Tables and named ranges
+
+Refresh must not break formulas. All data on Python-owned tabs lives in **Excel Tables** (structured references like `Trims[MSRP]` instead of `$A$2:$A$20`). All single-cell inputs referenced by formulas are **named ranges**. Refresh writes into tables by name — appending or removing rows never breaks downstream references. This discipline is enforced from the initial render.
+
+### Tab structure
+
+Naming convention: `Inputs` and `Notes` (user-owned) · `Data_*` (Python-owned raw data) · `Analysis_*` (Excel-formula-computed) · `Ref_*` (reference / provenance).
+
+**User-owned** (Python never writes):
+- `Inputs` — budget, target build capabilities, HYSA rate, down payment, trade-in value, state, ZIP, garaging, horizons to compare, home charging
+- `Notes` — free-form user notes
+
+**Python-owned data** (refreshable via `engine refresh`):
+- `Data_Trims` — trim × body × powertrain with MSRP, from `config/order_guide.json`
+- `Data_Options` — option codes, prices, applies-to-trims
+- `Data_Features` — feature taxonomy, availability matrix, three-price data
+- `Data_Incentives` — manufacturer incentives + as_of_date
+- `Data_Lease` — MF/residual by term/config + as_of_date
+- `Data_ModPricing` — feature → parts + install hours + as_of_date
+- `Data_Used` — Edmunds TMV/TCO for canonical used entries + as_of_date
+- `Data_TaxRules` — state × rate; federal credit status
+- `Data_Depreciation` — JL-specific curves
+
+**Excel-computed analysis** (all formulas):
+- `Analysis_Levers` — biggest levers sized in $ for the user
+- `Analysis_TrimPath` — three-price feature transparency + landed cost per trim path
+- `Analysis_Sourcing` — per-channel adjusted price
+- `Analysis_Financing` — cash / finance / lease with mechanism visible
+- `Analysis_Timing` — incentive delta by timing choice
+- `Analysis_OngoingCosts` — fuel/insurance/maintenance/tax per path over user horizon
+- `Analysis_Sensitivity` — what would flip which layer
+
+**Reference:**
+- `Ref_Provenance` — every data value's source + as_of_date consolidated
+- `Ref_Legend` — how to read the tabs
+
+### Tool choices
+
+- **openpyxl** — pure Python, reads/writes .xlsx, preserves formulas
+- **`.xlsx`** format (works in Excel, LibreOffice, Numbers)
+- CLI: `engine render` (fresh build), `engine refresh` (merge market data)
+- Source-of-truth JSON/YAML in `data/`, version-controlled
+
+### Provenance in this architecture
+
+Every value on `Data_*` tabs carries `source` and `as_of_date` per the MVP provenance framework (may render as adjacent columns on the tab or as cell comments). The `Ref_Provenance` tab consolidates them into a single lookup. Excel formulas can reference them; the user can always click a value and see where it came from.
 
 ## Multi-axis decision framework
 
@@ -50,7 +120,7 @@ Both flow through the same equation with different input schemas.
 
 ## Report shape
 
-Organized by **decision layer**, not by scenario. Each layer is a transparency section showing dollar movement and mechanism.
+Organized by **decision layer**, not by scenario. Each layer is a tab in the .xlsx (see "Implementation architecture" for tab naming), presenting dollar movement and mechanism through Excel formulas. The five conceptual sections below map to `Analysis_*` tabs.
 
 ### 1. Target build (the invariant)
 
