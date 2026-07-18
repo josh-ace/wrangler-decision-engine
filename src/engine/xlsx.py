@@ -26,6 +26,43 @@ _TABLE_STYLE = TableStyleInfo(
 )
 
 
+def _lay_table(
+    ws: Worksheet,
+    table_name: str,
+    header: list[str],
+    data_rows: list[list],
+    start_row: int,
+) -> Table:
+    """Write ``header`` + ``data_rows`` starting at ``start_row`` (column A) and wrap
+    the block in an Excel Table named ``table_name``. The single place table geometry
+    is computed, so every table — data, user-input, or Analysis-formula — is laid down
+    the same way and the structured-reference guarantee is uniform.
+
+    Cell values are written verbatim; a value that is a string beginning with ``=`` is
+    an Excel formula (openpyxl preserves it), so this same path lays formula tables.
+    """
+    for col_idx, name in enumerate(header, start=1):
+        ws.cell(row=start_row, column=col_idx, value=name)
+
+    for row_offset, row in enumerate(data_rows, start=start_row + 1):
+        for col_idx, value in enumerate(row, start=1):
+            ws.cell(row=row_offset, column=col_idx, value=value)
+
+    last_col = get_column_letter(len(header))
+    last_row = start_row + len(data_rows)
+    ref = f"A{start_row}:{last_col}{last_row}"
+
+    table = Table(displayName=table_name, ref=ref)
+    table.tableStyleInfo = _TABLE_STYLE
+    ws.add_table(table)
+
+    # Sensible starting widths so the tabs are legible on open.
+    for col_idx, name in enumerate(header, start=1):
+        ws.column_dimensions[get_column_letter(col_idx)].width = max(14, len(name) + 2)
+
+    return table
+
+
 def write_data_table(
     ws: Worksheet,
     table_name: str,
@@ -35,34 +72,38 @@ def write_data_table(
     """Write ``columns`` as a header row plus ``rows`` (or one empty placeholder
     row) and wrap the whole block in an Excel Table named ``table_name``.
 
+    The two ``PROVENANCE_COLUMNS`` are appended to the header; ``rows`` already carry
+    their two provenance values last (the per-module row-shape contract), so a row is
+    ``len(columns) + 2`` wide.
+
     An Excel Table needs at least one data row for its reference range, so when a
     module has no data yet (the scaffolding case) we emit a single blank row.
     Future ICs return real rows from ``load()`` and this function grows the table
     downward — the table name, and therefore every structured reference, is stable.
     """
     header = [*columns, *PROVENANCE_COLUMNS]
-
-    for col_idx, name in enumerate(header, start=1):
-        ws.cell(row=1, column=col_idx, value=name)
-
     data_rows = rows if rows else [[None] * len(header)]
-    for row_offset, row in enumerate(data_rows, start=2):
-        for col_idx, value in enumerate(row, start=1):
-            ws.cell(row=row_offset, column=col_idx, value=value)
+    return _lay_table(ws, table_name, header, data_rows, start_row=1)
 
-    last_col = get_column_letter(len(header))
-    last_row = 1 + len(data_rows)
-    ref = f"A1:{last_col}{last_row}"
 
-    table = Table(displayName=table_name, ref=ref)
-    table.tableStyleInfo = _TABLE_STYLE
-    ws.add_table(table)
+def write_plain_table(
+    ws: Worksheet,
+    table_name: str,
+    columns: list[str],
+    rows: list[list] | None = None,
+    start_row: int = 1,
+) -> Table:
+    """Like :func:`write_data_table` but **without** the provenance columns, and able
+    to start below row 1 so several tables can share one sheet.
 
-    # Sensible starting widths so the placeholder tabs are legible on open.
-    for col_idx, name in enumerate(header, start=1):
-        ws.column_dimensions[get_column_letter(col_idx)].width = max(14, len(name) + 2)
-
-    return table
+    For tables that are not provenance-carrying ``Data_*`` rows: the user-input
+    ``Target_Build`` table on ``Inputs`` (no source to date) and the two
+    ``Analysis_TrimPath`` formula tables (they compute from ``Data_*``, they don't
+    restate it). Keeping table *creation* centralized here is what makes the
+    structured-reference discipline uniform across data and analysis tabs alike.
+    """
+    data_rows = rows if rows else [[None] * len(columns)]
+    return _lay_table(ws, table_name, list(columns), data_rows, start_row=start_row)
 
 
 def clear_data_table(ws: Worksheet, table_name: str) -> None:
