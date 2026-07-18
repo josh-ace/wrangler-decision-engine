@@ -277,7 +277,7 @@ Git:
 
 ## #8 — Build decomposition engine + per-layer sub-models
 
-- **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND #1 (horizon) locked AND #7 (personal inputs) captured
+- **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
 - **Agent type:** `general-purpose`
 - **Branch:** `decomposition-engine`
 - **Output:** `calc/` directory with sub-models + tests
@@ -285,12 +285,16 @@ Git:
 
 Scope reshape (per finding #8, 2026-07-17): builds per-decision-layer decomposition, NOT ranked TCO scenarios. Sub-models compute cost impact per axis (trim path + three-price features; sourcing delta; financing math with cash-vs-finance mechanism; timing/incentive; ongoing costs by category; risk-flag placement). Composite scoring rejected.
 
+Sub-models take horizon N and personal inputs as **runtime parameters**, not build-time values. Same engine renders for any N and any personal-input file.
+
 Blockers:
 - Locked provenance schema (#4)
-- Locked time horizon (#1) — load-bearing on ongoing costs AND used-4xe
 - `config/order_guide.json` from #6
-- Personal inputs from #7 (drives lever prioritization)
 - Aftermarket parts pricing source (for three-price feature transparency)
+
+Not blockers (runtime inputs):
+- Personal inputs from #7 (schema needed for interface; specific values not)
+- Horizon N (parameter, not lock)
 
 ---
 

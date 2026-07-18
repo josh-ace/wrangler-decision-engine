@@ -211,8 +211,7 @@ Used is an alternative *condition/sourcing path* to the target build, not a sepa
 
 ## Open strategic locks
 
-- **Time horizon (task #1)** — N-year window over which ongoing costs and exit value are computed (3 / 5 / 8yr). **Materially load-bearing on the used-4xe scenario** (see finding #7). Also load-bearing on financing decomposition (lease term, finance duration, cash opportunity cost).
-- **Provenance framework detail (task #4)** — beyond MVP source + as_of_date
+- **Provenance framework detail (task #4)** — beyond MVP source + as_of_date; schema shapes engine data structures, so this is a genuine architectural lock
 
 Resolved:
 
@@ -220,6 +219,7 @@ Resolved:
 - **392 scope** — out entirely
 - **Weighting philosophy** (was task #2) — moot after finding #8 framing shift to transparency. No ranking, nothing to weight. Removed.
 - **Report structure** — decomposed by layer per finding #8; no scorecard, no composite
+- **Time horizon** (was task #1) — **not a strategic lock; it's a runtime parameter.** Sub-models accept N; report can render one N or compare across N (e.g., N=3 vs N=5 vs N=8, which the used-4xe warranty cliff makes uniquely revealing). Horizon is captured as a field on class #16 (Personal), not a spec-time decision.
 
 ## Variable taxonomy (refined by discovery pass 2026-07-15)
 
