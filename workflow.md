@@ -505,6 +505,99 @@ Time budget: substantial — this involves both data curation and code. Prioriti
 
 ---
 
+## #17 — IC #3: aftermarket mod pricing + Data_ModPricing real render
+
+- **Spawn when:** any time (IC #16 features taxonomy is merged; independent of Analysis_TrimPath work)
+- **Agent type:** `general-purpose`
+- **Branch:** `data-mod-pricing-real`
+- **Isolation:** `worktree`
+- **Output:** `data/mod_pricing.json` + real `src/engine/data/mod_pricing.py` load() + extended tests; all tests green
+
+**Prompt:**
+
+```
+You are running IC #3 of the vertical-slice sequence. Data_Trims (IC #1) and Data_Features (IC #2) are merged. Your job is to produce aftermarket pricing per mod-target feature so Analysis_TrimPath can later compute the three-price transparency (standard-embedded / factory-option / aftermarket).
+
+Read:
+- C:\claude\Wrangler\spec.md sections "Multi-axis decision framework", "Report shape" (the trim-path three-price example), and "Implementation architecture"
+- C:\claude\Wrangler\README.md's "Plug-in pattern for future ICs" (curated data/*.json pattern is now documented)
+- C:\claude\Wrangler\discovery\report.md §2.5 (live-verified aftermarket retailers with confidence flags)
+- C:\claude\Wrangler\data\features.json (source-of-truth for feature IDs; every mod-pricing entry keys off these)
+- C:\claude\Wrangler\src\engine\data\features.py (the reference for the curated-data pattern)
+- C:\claude\Wrangler\src\engine\data\mod_pricing.py (the stub you're filling in — note COLUMNS = ["Feature", "Parts_Cost", "Install_Hours"])
+
+Source data landscape:
+- Quadratec (quadratec.com) — 4xe fitment authority per discovery; per-product itemized pricing
+- Northridge4x4 (northridge4x4.com) — per-component kit costing; strongest for suspension/armor
+- ExtremeTerrain (extremeterrain.com) — the only source giving install hours + difficulty
+- No public API; every retailer is HTML. Do NOT scrape at volume — sample representative products per feature (~2-3 sources per feature is fine).
+- Do NOT fetch labor $ — retailers don't publish it, and the module intentionally emits Install_Hours (not labor cost) so Excel can multiply by a user-input labor rate downstream.
+
+Goal: produce a curated data/mod_pricing.json holding aftermarket parts cost + install hours per feature (keyed to features.json IDs), and render it into Data_ModPricing.
+
+Deliverables (committed on branch data-mod-pricing-real):
+
+1. data/mod_pricing.json
+   Structure: a JSON object with a `pricing` array + top-level `provenance` node (`source`, `as_of_date`) + a `retailers` map documenting URL and reliability tier.
+
+   Each pricing entry:
+   - `feature_id` — MUST match an id in data/features.json (validated by tests)
+   - `parts_cost` — integer USD, typical/representative price
+   - `install_hours` — number, typical shop hours (from ExtremeTerrain when available; note the assumption otherwise)
+   - `parts_cost_range` — optional {low, high} when variance is material (e.g., D30 vs D44 locker spec, budget vs premium lift kits)
+   - `retailer_sources` — array of {retailer, product, url} entries used to establish the price
+   - `notes` — anything worth preserving: variants, warranty impact flags, install caveats
+
+   Provenance node example: `{source: "aftermarket_retailers + curator", as_of_date: "2026-07-18"}`.
+
+2. src/engine/data/mod_pricing.py
+   - Update the module docstring to point at data/mod_pricing.json, document the join model (Data_ModPricing rows join Data_Features by Feature name; Analysis_TrimPath will VLOOKUP/INDEX-MATCH), and note that labor rate comes from Inputs (not from this data).
+   - Implement load() to read data/mod_pricing.json and emit one row per pricing entry matching COLUMNS = ["Feature", "Parts_Cost", "Install_Hours"] followed by provenance (Source, As_Of_Date). Look up the feature `name` from features.json using feature_id (join at load-time so the Excel column is the display name).
+   - Follow the row-shape contract established in IC #1: provenance is per-row.
+   - Do NOT modify xlsx.py or workbook.py.
+
+3. Scope guidance for the taxonomy of pricing
+   Cover features that are practical aftermarket mod targets. Skip features that are essentially OEM-only or that no one meaningfully aftermarkets:
+   - INCLUDE: rear/front locker (via ARB Air Locker or equivalent), electronic sway disconnect (Currie Antirock / RockJock manual disconnect as functional equivalent), rock rails, skid plates, steel front bumper, winch, 33"/35" tires + wheels, lift kits (mild ~2", larger 3+"), LED headlamps, LED aux lighting bar, half doors / tube doors, hard top variants that are aftermarket-available, snorkels if in features.json
+   - CONSIDER: winch bumper combos, storage armor, tow package add-ons (hitch retro)
+   - EXCLUDE: features where no practical aftermarket exists (Rock-Trac 4:1 transfer case swap is impractical; Selec-Trac; interior tech like UConnect head units are technically aftermarket but out-of-scope for this project)
+   - Expected coverage: ~15-25 pricing entries. Not every feature in features.json gets a row here — features with no practical aftermarket should simply be omitted.
+
+4. Tests
+   - tests/test_data_mod_pricing.py (new): well-formedness; every feature_id exists in features.json; parts_cost > 0; install_hours >= 0; row-shape contract; retailer_sources non-empty for every entry
+   - tests/test_e2e.py extended: Data_ModPricing row count > 0; every row's Feature name matches a feature in Data_Features; parts_cost + install_hours populated; provenance populated
+   - All 65 baseline tests remain green (72+ total after this IC)
+
+5. Notes on judgment
+   - Prices in this file are captured on the as_of_date. They are known to be sale/coupon-driven and will drift. This is expected; refresh will re-pull later.
+   - Where a feature has multiple aftermarket variants at different quality/price tiers (e.g., budget "3-inch lift" at $600 vs premium at $2,500), use the typical/representative choice AND record the range in `parts_cost_range` with notes.
+   - Discovery §2.5 confidence flags: Quadratec HIGH; Northridge4x4 HIGH (per-component costing); ExtremeTerrain HIGH (install hours source); Morris4x4 LOW (Cloudflare-gated). Prefer HIGH sources.
+
+Success criteria (all must be true before commit):
+- pytest passes green (65 baseline + new)
+- ruff check passes clean
+- engine render produces a valid .xlsx; Data_ModPricing tab has real rows
+- Every feature_id in mod_pricing.json exists in features.json
+- Provenance retailer URLs are real (validated at capture time, may 403 automated fetch — that's fine)
+
+Scope boundaries:
+- Do NOT modify data/features.json (that's IC #16's artifact)
+- Do NOT modify Data_Features or any other data module
+- Do NOT design Analysis_TrimPath formulas (IC #18/#19's job)
+- Do NOT add named ranges or modify workbook.py — the labor-rate named range will be added when Analysis_TrimPath needs it
+- Do NOT fetch aggressively — sample representative products per feature; ~2-3 sources max
+
+Git:
+- Work on branch `data-mod-pricing-real` (create it: `git checkout -b data-mod-pricing-real`)
+- Commit incrementally with clear messages
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: substantial — this is data curation with retailer research. Prioritize honest, sourced prices over comprehensive feature coverage.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
