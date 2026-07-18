@@ -707,6 +707,89 @@ Time budget: substantial — this is design work that unlocks the vertical slice
 
 ---
 
+## #19 — IC #5: Analysis_TrimPath implementation (vertical-slice proof point)
+
+- **Spawn when:** IC #18 design doc is merged (currently merged)
+- **Agent type:** `general-purpose`
+- **Branch:** `analysis-trim-path-impl`
+- **Isolation:** `worktree`
+- **Output:** implemented Analysis_TrimPath with real Excel formulas + extended tests; vertical slice end-to-end proof
+
+**Prompt:**
+
+```
+You are running IC #5 — the vertical-slice implementation. IC #4 produced the design doc at `analysis-designs/trim_path.md`. Your job is to execute that design mechanically: no new design decisions, no judgment calls that aren't already resolved in the doc.
+
+Read (in order):
+1. C:\claude\Wrangler\analysis-designs\trim_path.md — this is your specification. Every formula, every layout choice, every test assertion is spelled out.
+2. C:\claude\Wrangler\spec.md "Implementation architecture" section (tab structure + Excel Tables discipline invariants)
+3. C:\claude\Wrangler\README.md's plug-in pattern
+4. Current implementations you'll modify:
+   - src/engine/workbook.py (adds Input_Labor_Rate named range + Target_Build section on Inputs)
+   - src/engine/xlsx.py (add the "table without provenance" helper — the design specifies this is one place a targeted extension is justified)
+   - src/engine/analysis/trim_path.py (currently a title-only stub; replace with the two-table Analysis_TrimPath build)
+5. Existing tests you'll extend:
+   - tests/test_e2e.py (add the 9 assertions from the design doc's "Test cases for IC #19 to validate against" section)
+   - tests/test_analysis_modules.py (formula-string assertions on a blank sheet if that's the right home for them)
+   - tests/test_data_modules.py (may need small updates if the Target_Build table on Inputs changes what the parametrized checks assume)
+
+Goal: implement the design mechanically so that `engine render` produces an .xlsx that actually computes the three-price transparency landed cost per trim path. When a user opens the file, marks the target-build features on the Inputs tab, and adjusts labor rate, they see landed cost per config recompute live.
+
+Deliverables (committed on branch analysis-trim-path-impl):
+
+1. `src/engine/xlsx.py` — minimal extension
+   - Per the design's "one place a new xlsx.py helper is justified": add either a `include_provenance: bool = True` parameter to `write_data_table` OR a sibling `write_plain_table` function. Pick one and be consistent.
+   - Do NOT add a formula-writing helper. Formulas are just strings assigned to `ws.cell(...).value` — openpyxl preserves them. The design says as much.
+
+2. `src/engine/workbook.py`
+   - Append Labor Rate ($/hr) to the INPUT_ROWS structure. Default value: 120. Attach `Input_Labor_Rate` named range (the pattern already exists for the other Input_* named ranges).
+   - Render the Target_Build section below the single-cell inputs block. Header row + explanatory subheader + a plain (no-provenance) Excel Table named `Target_Build` with two columns: `Feature`, `Include`. Seed the table from the mod-pricing coverage (read `engine.data.mod_pricing`'s id→name map — the design's implementation notes call this out). Initial Include values default to "No". Attach a Yes/No data-validation dropdown to the Include column.
+
+3. `src/engine/analysis/trim_path.py`
+   - Replace the title-only `setup_formulas(ws)` with the two-table build per the design's "Analysis_TrimPath layout" section:
+     - Enumerate 28 configs from `engine.data.trims.load()` (or re-read the order guide)
+     - Enumerate 20 covered features from `engine.data.mod_pricing` (id→name map)
+     - Write TrimPathDetail Excel Table (560 rows) with per-column formulas from the design's "Formulas per cell type" section — every formula uses structured references (no `$A$2` patterns)
+     - Write TrimPathSummary Excel Table (28 rows) with its per-column formulas
+     - Number-format the dollar columns (Base_MSRP, Aftermarket_Cost, Aftermarket_Labor_Cost, Landed_Cost, Delta_vs_Cheapest) for legibility
+
+4. Tests — implement all 9 assertions from the design doc's "Test cases for IC #19 to validate against":
+   - Sport / Willys / Rubicon landed values within $50 of the worked example ($48,890 / $54,390 / $58,350)
+   - $5k calibration guard rail: Sport-mods landed < Rubicon-at-target landed by at least $5,000
+   - No hardcoded cell addresses: grep every formula string for `\$[A-Z]+\$[0-9]` → 0 hits
+   - Trims_MSRP named range still resolves to `Trims[MSRP]`
+   - Standard-on delimiter safety: Sport is NOT counted standard for a feature whose Standard_On is "Sport S, Willys, Rubicon, Rubicon X"
+   - Two Analysis tables exist (TrimPathSummary 28 rows, TrimPathDetail 560 rows)
+   - Refresh preserves target-build Include values
+   
+   Because openpyxl doesn't calculate formulas, use the design's recommended approach: recompute expected values in Python from the same source data (trims + features + mod_pricing) and assert against the arithmetic; separately assert the formula strings use structured references only.
+
+Success criteria (all must be true before commit):
+- pytest passes green (77 baseline + new assertions), no skips
+- ruff check passes clean
+- engine render produces a valid .xlsx that opens cleanly
+- The Trims_MSRP named range still resolves after render
+- Formula strings in Analysis_TrimPath contain no `$[A-Z]+$[0-9]` patterns
+- README updated only if genuinely necessary — the plug-in pattern likely doesn't shift for this IC
+
+Scope boundaries:
+- Do NOT design anything new — the design doc is authoritative. If you find a gap, flag it and choose the most conservative option; don't rewrite the design.
+- Do NOT fix the "Data issues noted for a follow-on IC" items (body-agnostic ModPricing, factory-option gaps, winch prerequisite) — those are future ICs.
+- Do NOT touch Data_Trims, Data_Features, Data_ModPricing, or other data modules
+- Do NOT wire Data_Options (that's a separate future IC)
+- Do NOT design formulas for other Analysis_* tabs (Sourcing, Financing, etc.)
+
+Git:
+- Work on branch `analysis-trim-path-impl` (create it: `git checkout -b analysis-trim-path-impl`)
+- Commit incrementally with clear messages (workbook edits → xlsx helper → trim_path implementation → tests)
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: substantial — this is the vertical-slice proof point and touches four Python files plus tests. The design doc handles the specification; you're doing mechanical implementation. Prioritize matching the design exactly; deviations should be rare and documented in commit messages.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
