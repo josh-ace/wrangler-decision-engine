@@ -362,6 +362,73 @@ Time budget: substantial — foundational work. Take the time to get the plug-in
 
 ---
 
+## #15 — IC #1: real Data_Trims render from config/order_guide.json
+
+- **Spawn when:** any time (scaffolding IC #14 is merged; this is the next step in the vertical slice)
+- **Agent type:** `general-purpose`
+- **Branch:** `data-trims-real`
+- **Isolation:** `worktree`
+- **Output:** `src/engine/data/trims.py` real `load()` + extended E2E assertions; all tests green
+
+**Prompt:**
+
+```
+You are running IC #1 of the vertical-slice sequence for the Wrangler decision engine. Scaffolding (IC #14) landed the walking skeleton; your job is to replace the Data_Trims stub with real data from the parsed order guide.
+
+Read C:\claude\Wrangler\spec.md "Implementation architecture" section, C:\claude\Wrangler\README.md (especially the "Plug-in pattern for future ICs" section), and inspect the existing code:
+- src/engine/data/trims.py (the module you'll be filling in)
+- src/engine/xlsx.py (understand how the table is written and provenance columns are handled)
+- tests/test_e2e.py (this is where you extend the pipeline validation)
+- tests/test_data_modules.py (parametrized tests that will start asserting real rows)
+
+Source data: C:\claude\Wrangler\config\order_guide.json — parsed by an earlier IC (see config/order_guide_notes.md if you need context). Structure: body_styles → JL_2_door / JLU_4_door → trims[] → configurations[]. Each configuration is a fully-delivered price (base + engine/trans + quick order package, before destination). Invoice is null everywhere by design — the guides don't publish it.
+
+Goal: implement Data_Trims for real, so a rendered .xlsx has one row per (trim × body-style × configuration) with actual MSRP values, sourced and dated.
+
+Deliverables (committed on branch data-trims-real):
+
+1. Replace load() in src/engine/data/trims.py with real code
+   - Read config/order_guide.json
+   - Iterate body_styles → trims → configurations
+   - Emit one row per configuration matching COLUMNS = ["Trim", "Body", "Powertrain", "MSRP", "Invoice"]
+   - Provenance: Each row should carry Source and As_Of_Date at the end (append to the row). Source = "order_guide_2026" (or read from the JSON's provenance nodes if you prefer); As_Of_Date = "2025-08-06" (the reissue date recorded in the JSON's provenance).
+   - Establish and document the row-shape pattern for future data modules to follow (comment or docstring update on the module) — modules return rows that INCLUDE provenance values as the last two elements, matching the header PROVENANCE_COLUMNS xlsx.py appends. Update the module docstring to be crisp about this so IC #2 through #N don't guess.
+
+2. Powertrain field naming: use a human-readable label per configuration. Suggested pattern: "V6 6MT" for the 23-prefix, "2.0T 8AT" for 22-prefix, "V6 8AT" for 24-prefix. If you want to preserve the code prefix as an additional column, propose it — but don't add without justification.
+
+3. Extend tests/test_e2e.py with content assertions
+   - Data_Trims row count matches expected (should be ~20+ configurations across both bodies)
+   - Spot-check a known value: e.g., JL 2-door Sport V6 6MT MSRP is $33,785 per the order guide notes
+   - Spot-check a JLU 4-door value: e.g., JLU Rubicon V6 6MT MSRP is $49,270
+   - Provenance columns are populated (Source = "order_guide_2026", As_Of_Date = "2025-08-06") on every row
+   - All 50 existing tests still pass
+
+4. If xlsx.py needs a small tweak to handle real rows cleanly (e.g., if the row-length pattern I described above doesn't work with the current placeholder-row logic), fix it — but justify the change in your commit message. The single-owner discipline for xlsx.py means changes there ripple to every data module, so be deliberate.
+
+5. Add a small unit test for the parser (e.g., tests/test_data_trims.py) validating: load() returns > 0 rows; each row has the right shape; provenance is populated.
+
+Success criteria (all must be true before commit):
+- `pytest` passes green (existing 50 + new)
+- `ruff check` passes clean
+- `engine render` produces a valid .xlsx; opening Data_Trims tab visually shows real rows
+- README's plug-in pattern section is updated if you changed the pattern
+
+Scope boundaries:
+- Do NOT touch Data_Options, Data_Features, or any other Data_* module — that's for later ICs
+- Do NOT add real formulas to Analysis_* tabs — separate IC
+- Do NOT rewrite xlsx.py unless necessary; small justified tweaks are fine
+
+Git:
+- Work on branch `data-trims-real` (create it: `git checkout -b data-trims-real`)
+- Commit incrementally with clear messages
+- Do NOT push to origin, do NOT merge to main, do NOT delete the branch
+- Return the branch name in your final message
+
+Time budget: modest — this is a bounded IC. Should complete in a few hours max.
+```
+
+---
+
 ## #8 — Build decomposition engine + per-layer sub-models
 
 - **Spawn when:** provenance framework locked (#4) AND #6 (config data) complete AND aftermarket parts pricing sourced
